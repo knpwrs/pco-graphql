@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  server:
+    build: ./server
+    command: npm run dev
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "${PORT}:8000"
+    environment:
+      DEBUG: ${DEBUG}
+      SECRET: ${SECRET}
+      CALLBACK_URL: ${CALLBACK_URL}
+      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
+      OAUTH_SECRET: ${OAUTH_SECRET}

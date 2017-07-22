@@ -6,10 +6,10 @@ import OAuth2Strategy from 'passport-oauth2';
 import debug from 'debug';
 
 const d = debug('app:server');
+const PORT = 8000;
 
-const { CALLBACK_URL, PORT, SECRET, OAUTH_CLIENT_ID, OAUTH_SECRET } = process.env;
+const { CALLBACK_URL, SECRET, OAUTH_CLIENT_ID, OAUTH_SECRET } = process.env;
 
-d(`PORT: ${PORT}`);
 d(`OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}`);
 d(`OAUTH_SECRET: ${OAUTH_SECRET}`);
 

@@ -1,7 +1,0 @@
-layout node
-export DEBUG=app:*
-export PORT=8000
-export SECRET=keyboardcat
-export CALLBACK_URL=http://localhost:8000/auth/pco/callback
-export OAUTH_CLIENT_ID=<INSERT OAUTH CLIENT ID HERE>
-export OAUTH_SECRET=<INSERT OUATH SECRET HERE>
