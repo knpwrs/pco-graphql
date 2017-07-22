@@ -5,8 +5,7 @@ ENV HOME=/home/node
 RUN mkdir $HOME/app
 WORKDIR $HOME/app
 # Install dependencies without source code to take advantage of docker cache
-COPY package.json $HOME/app
-COPY package-lock.json $HOME/app
+COPY package.json package-lock.json $HOME/app/
 RUN npm install
 # Copy application code
 COPY . $HOME/app
