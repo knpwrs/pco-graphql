@@ -1,6 +1,8 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import session from 'express-session';
+import connectRedis from 'connect-redis';
 import passport from 'passport';
 import OAuth2Strategy from 'passport-oauth2';
 import debug from 'debug';
@@ -28,11 +30,27 @@ passport.use('pco', new OAuth2Strategy({
   cb(null, { id: 1 });
 }));
 
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((id, done) => done(null, { id }));
+passport.serializeUser((user, done) => {
+  d('serializing user');
+  d(user);
+  done(null, user.id);
+});
+passport.deserializeUser((id, done) => {
+  d('deserializing user');
+  d(id);
+  done(null, { id });
+});
 
+
+app.use(cookieParser(SECRET));
 app.use(bodyParser.json());
+
+const RedisStore = connectRedis(session);
+
 app.use(session({
+  store: new RedisStore({
+    host: 'redis',
+  }),
   secret: SECRET,
   resave: false,
   saveUninitialized: false,
