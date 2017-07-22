@@ -23,6 +23,7 @@ passport.use('pco', new OAuth2Strategy({
   clientID: OAUTH_CLIENT_ID,
   clientSecret: OAUTH_SECRET,
   callbackURL: CALLBACK_URL,
+  scope: ['people', 'services'],
 }, (accessToken, refreshToken, profile, cb) => {
   d(accessToken);
   d(refreshToken);
