@@ -3,11 +3,13 @@ services:
   server:
     build: ./server
     command: npm run dev
+    # command: npm run debug
     volumes:
       - ./server:/home/node/app
       - /home/node/app/node_modules
     ports:
       - "${PORT}:8000"
+      - "9229:9229" # Debug port
     environment:
       DEBUG: ${DEBUG}
       SECRET: ${SECRET}

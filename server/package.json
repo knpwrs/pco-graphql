@@ -6,6 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint lib",
     "dev": "nodemon lib/server --exec babel-node",
+    "debug": "babel-node --inspect=0.0.0.0:9229 lib/server",
     "start": "babel-node lib/server"
   },
   "author": "Kenneth Powers <ken@kenpowers.net> (http://knpw.rs)",
