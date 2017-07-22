@@ -41,6 +41,13 @@ passport.deserializeUser((id, done) => {
   done(null, { id });
 });
 
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+};
 
 app.use(cookieParser(SECRET));
 app.use(bodyParser.json());
@@ -65,6 +72,11 @@ app.get('/auth/pco/callback', passport.authenticate('pco', {
   failureRedirect: '/login',
 }));
 app.get('/login', (req, res) => res.redirect('/auth/pco'));
+app.get('/logout', isAuthenticated, (req, res) => {
+  req.logout();
+  res.redirect('/');
+});
+app.get('/secret', isAuthenticated, ({ user }, res) => res.end(`Secret! User ${user.id}`));
 app.get('/', (req, res) => res.end('Hello!'));
 
 app.listen(PORT, () => {
