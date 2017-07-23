@@ -4,8 +4,8 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import passport from 'passport';
-import OAuth2Strategy from 'passport-oauth2';
 import debug from 'debug';
+import PcoStrategy from './pco-strategy';
 
 const d = debug('app:server');
 const PORT = 8000;
@@ -17,16 +17,12 @@ d(`OAUTH_SECRET: ${OAUTH_SECRET}`);
 
 const app = express();
 
-passport.use('pco', new OAuth2Strategy({
-  authorizationURL: 'https://api.planningcenteronline.com/oauth/authorize',
-  tokenURL: 'https://api.planningcenteronline.com/oauth/token',
+passport.use('pco', new PcoStrategy({
   clientID: OAUTH_CLIENT_ID,
   clientSecret: OAUTH_SECRET,
   callbackURL: CALLBACK_URL,
   scope: ['people', 'services'],
 }, (accessToken, refreshToken, profile, cb) => {
-  d(accessToken);
-  d(refreshToken);
   d(profile);
   cb(null, { id: 1 });
 }));
