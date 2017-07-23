@@ -6,6 +6,7 @@ import connectRedis from 'connect-redis';
 import passport from 'passport';
 import debug from 'debug';
 import PcoStrategy from './pco-strategy';
+import { encrypt, decrypt } from './crypto';
 
 const d = debug('app:server');
 const PORT = 8000;
@@ -23,19 +24,30 @@ passport.use('pco', new PcoStrategy({
   callbackURL: CALLBACK_URL,
   scope: ['people', 'services'],
 }, (accessToken, refreshToken, profile, cb) => {
-  d(profile);
-  cb(null, { id: 1 });
+  cb(null, {
+    profile,
+    accessToken,
+    refreshToken,
+  });
 }));
 
-passport.serializeUser((user, done) => {
+passport.serializeUser(({ accessToken, refreshToken, profile }, done) => {
   d('serializing user');
-  d(user);
-  done(null, user.id);
+  const obj = {
+    encryptedAccessToken: encrypt(accessToken, SECRET),
+    encryptedRefreshToken: encrypt(refreshToken, SECRET),
+    profile,
+  };
+  done(null, obj);
 });
-passport.deserializeUser((id, done) => {
+passport.deserializeUser(({ encryptedAccessToken, encryptedRefreshToken, profile }, done) => {
   d('deserializing user');
-  d(id);
-  done(null, { id });
+  const user = {
+    accessToken: decrypt(encryptedAccessToken, SECRET),
+    encryptedRefreshToken: decrypt(encryptedRefreshToken, SECRET),
+    profile,
+  };
+  done(null, user);
 });
 
 const isAuthenticated = (req, res, next) => {
@@ -73,7 +85,7 @@ app.get('/logout', isAuthenticated, (req, res) => {
   req.logout();
   res.redirect('/');
 });
-app.get('/secret', isAuthenticated, ({ user }, res) => res.end(`Secret! User ${user.id}`));
+app.get('/profile.json', isAuthenticated, ({ user }, res) => res.json(user.profile));
 app.get('/', (req, res) => res.end('Hello!'));
 
 app.listen(PORT, () => {

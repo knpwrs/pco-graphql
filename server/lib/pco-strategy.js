@@ -20,7 +20,8 @@ export default class PcoStrategy extends OAuth2Strategy {
   /* eslint-disable class-methods-use-this */
   async userProfile(accessToken, done) {
     const res = await fetch(profileUrl, accessToken);
-    done(null, await res.json());
+    const json = await res.json();
+    done(null, json.data);
   }
   /* eslint-enable class-methods-use-this */
 }
