@@ -1,4 +1,5 @@
 import passport from 'passport';
+import express from 'express';
 import debug from 'debug';
 import { encrypt, decrypt } from './crypto';
 import PcoStrategy from './pco-strategy';
@@ -59,3 +60,19 @@ export const isAuthenticated = (req, res, next) => {
     res.redirect('/login');
   }
 };
+
+/**
+ * Authentication sub-app.
+ */
+export const authApp = express();
+
+authApp.get('/pco', passport.authenticate('pco'));
+authApp.get('/pco/callback', passport.authenticate('pco', {
+  successRedirect: '/',
+  failureRedirect: 'login',
+}));
+authApp.get('/login', (req, res) => res.redirect('pco'));
+authApp.get('/logout', isAuthenticated, (req, res) => {
+  req.logout();
+  res.redirect('/');
+});

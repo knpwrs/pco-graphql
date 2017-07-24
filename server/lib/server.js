@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import debug from 'debug';
-import passport, { isAuthenticated } from './passport';
+import passport, { isAuthenticated, authApp } from './passport';
 
 const d = debug('app:server');
 const PORT = 8000;
@@ -30,16 +30,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/auth/pco', passport.authenticate('pco'));
-app.get('/auth/pco/callback', passport.authenticate('pco', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-}));
-app.get('/login', (req, res) => res.redirect('/auth/pco'));
-app.get('/logout', isAuthenticated, (req, res) => {
-  req.logout();
-  res.redirect('/');
-});
+app.use('/auth', authApp);
+
 app.get('/profile.json', isAuthenticated, ({ user }, res) => res.json(user.profile));
 app.get('/', (req, res) => res.end('Hello!'));
 
