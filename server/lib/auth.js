@@ -20,11 +20,41 @@ const AUTH_URL = yuri(API_BASE)
 const TOKEN_URL = yuri(API_BASE)
   .pathname('oauth/token')
   .format();
+const REFRESH_THRESHOLD = 5 * 60 * 1000; // Five minutes
 
-export const pcoAuthenticated = (req, res, next) => {
+const shouldRefresh = pco => Date.now() > pco.tokenExpires - REFRESH_THRESHOLD;
+
+const getTokens = async (code, grantType = 'authorization_code') => {
+  d(`Getting tokens from PCO via ${grantType}`);
+  const { body } = await got.post(TOKEN_URL, {
+    form: true,
+    json: true,
+    body: {
+      [grantType]: code,
+      grant_type: grantType,
+      client_id: OAUTH_CLIENT_ID,
+      client_secret: OAUTH_SECRET,
+      redirect_uri: CALLBACK_URL,
+    },
+  });
+  return {
+    accessToken: body.access_token,
+    refreshToken: body.refresh_token,
+    tokenExpires: Date.now() + (2 * 60 * 60 * 1000), // Two hours
+  };
+};
+
+export const pcoAuthenticated = async (req, res, next) => {
   if (req.session.pco) {
+    d('PCO session active.');
+    const { pco } = req.session;
+    if (shouldRefresh(pco)) {
+      d('Need to refresh PCO tokens.');
+      req.session.pco = await getTokens(pco.refreshToken, 'refresh_token');
+    }
     next();
   } else {
+    d('No active PCO session.');
     next(new Error('Not authenticated with PCO!'));
   }
 };
@@ -56,23 +86,9 @@ authApp.get('/pco/callback', async (req, res, next) => {
   try {
     const { code } = req.query;
     d(`Got code from PCO: ${code}`);
-    const { body } = await got.post(TOKEN_URL, {
-      form: true,
-      json: true,
-      body: {
-        code,
-        grant_type: 'authorization_code',
-        client_id: OAUTH_CLIENT_ID,
-        client_secret: OAUTH_SECRET,
-        redirect_uri: CALLBACK_URL,
-      },
-    });
+    const tokens = getTokens(code);
     d('Got tokens from PCO');
-    req.session.pco = {
-      accessToken: body.access_token,
-      refreshToken: body.refresh_token,
-      tokenExpires: Date.now() + (2 * 60 * 60 * 1000), // Two hours
-    };
+    req.session.pco = tokens;
     res.redirect('/');
   } catch (err) {
     next(err);
