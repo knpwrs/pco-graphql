@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import debug from 'debug';
-import passport, { isAuthenticated, authApp } from './passport';
+import { getProfile, pcoAuthenticated, authApp } from './auth';
 
 const d = debug('app:server');
 const PORT = 8000;
@@ -27,12 +27,12 @@ app.use(session({
   saveUninitialized: false,
   secure: app.get('env') === 'production',
 }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use('/auth', authApp);
 
-app.get('/profile.json', isAuthenticated, ({ user }, res) => res.json(user.profile));
+app.get('/profile.json', pcoAuthenticated, async (req, res) => {
+  res.json(await getProfile(req.session.pco));
+});
 app.get('/', (req, res) => res.end('Hello!'));
 
 app.listen(PORT, () => {
