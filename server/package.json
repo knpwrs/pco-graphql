@@ -18,9 +18,10 @@
     "debug": "^2.6.8",
     "express": "^4.15.3",
     "express-session": "^1.15.4",
-    "node-fetch": "^1.7.1",
+    "got": "^7.1.0",
     "passport": "^0.3.2",
-    "passport-oauth2": "^1.4.0"
+    "passport-oauth2": "^1.4.0",
+    "yuri": "^1.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
