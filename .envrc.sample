@@ -1,0 +1,9 @@
+PATH_add scripts
+export DEBUG=app:*
+# Override to debug with environment variable for debugging
+export SERVER_NPM_SCRIPT=dev
+export PORT=8000
+export SECRET=keyboardcat
+export CALLBACK_URL=http://localhost:8000/auth/pco/callback
+export OAUTH_CLIENT_ID=
+export OAUTH_SECRET=
