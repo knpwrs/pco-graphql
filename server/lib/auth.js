@@ -2,11 +2,10 @@ import express from 'express';
 import yuri from 'yuri';
 import got from 'got';
 import debug from 'debug';
-// import { encrypt, decrypt } from './crypto';
 
 const d = debug('app:auth');
 
-const { CALLBACK_URL, /* SECRET, */ OAUTH_CLIENT_ID, OAUTH_SECRET } = process.env;
+const { CALLBACK_URL, OAUTH_CLIENT_ID, OAUTH_SECRET } = process.env;
 const API_BASE = 'https://api.planningcenteronline.com/';
 const AUTH_URL = yuri(API_BASE)
   .pathname('oauth/authorize')
