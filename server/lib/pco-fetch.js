@@ -79,7 +79,7 @@ const fetchFactory = (accessToken) => {
  *
  * @param {string} accessToken The PCO access token to use for authorization.
  */
-const memorizedFetchFactory = mem(fetchFactory, { maxAge: INTERVAL });
+const memoizedFetchFactory = mem(fetchFactory, { maxAge: INTERVAL });
 
 /**
  * An uncurried version of the above `memoizedFetchFactory`. This allows
@@ -87,4 +87,4 @@ const memorizedFetchFactory = mem(fetchFactory, { maxAge: INTERVAL });
  * previous benefits of memoization and throttling. Although this is
  * "uncurried," the function still allows for currying.
  */
-export default uncurryN(2, memorizedFetchFactory);
+export default uncurryN(2, memoizedFetchFactory);
