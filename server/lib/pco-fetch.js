@@ -18,6 +18,7 @@ const INTERVAL = 20 * 1000; // 20 seconds
  *
  * @param {string} accessToken The PCO access token to use for authorization.
  * @param {string} url The resource to fetch.
+ * @returns {Promise} A promise which resolves with the requested resource.
  */
 const bareFetch = curry(async (accessToken, url) => {
   let res = { ok: false };
@@ -54,6 +55,8 @@ const bareFetch = curry(async (accessToken, url) => {
  * account.
  *
  * @param {string} accessToken The PCO access token to use for authorization.
+ * @returns {function} fetch(url) A function which fetches a resource using the
+ *   previously provided access token. Throttled to 100 requests per 20 seconds.
  */
 const fetchFactory = (accessToken) => {
   d('Creating fetch function.');
@@ -78,6 +81,8 @@ const fetchFactory = (accessToken) => {
  * on user id instead of access token.
  *
  * @param {string} accessToken The PCO access token to use for authorization.
+ * @returns {function} fetch(url) A function which fetches a resource using the
+ *   previously provided access token. Throttled to 100 requests per 20 seconds.
  */
 const memoizedFetchFactory = mem(fetchFactory, { maxAge: INTERVAL });
 
@@ -86,5 +91,9 @@ const memoizedFetchFactory = mem(fetchFactory, { maxAge: INTERVAL });
  * clients to call using two straight arguments while retaining all the
  * previous benefits of memoization and throttling. Although this is
  * "uncurried," the function still allows for currying.
+ *
+ * @param {string} accessToken The PCO access token to use for authorization.
+ * @param {string} url The resource to fetch.
+ * @returns {Promise} A promise which resolves with the requested resource.
  */
 export default uncurryN(2, memoizedFetchFactory);
