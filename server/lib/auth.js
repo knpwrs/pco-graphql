@@ -1,6 +1,7 @@
 import express from 'express';
 import yuri from 'yuri';
-import got from 'got';
+import fetch from 'node-fetch';
+import { URLSearchParams } from 'url';
 import debug from 'debug';
 
 const d = debug('app:auth');
@@ -22,6 +23,14 @@ const TOKEN_URL = yuri(API_BASE)
 const REFRESH_THRESHOLD = 5 * 60 * 1000; // Five minutes
 
 /**
+ * Given a failed response object returns a new Error object.
+ */
+const checkResponse = async (res) => {
+  if (res.ok) return;
+  throw new Error(`Error from PCO API: ${await res.text()}`);
+};
+
+/**
  * Determines if tokens need to be refreshed.
  *
  * @param {object} pco The pco session object.
@@ -38,23 +47,24 @@ const shouldRefresh = pco => Date.now() > pco.tokenExpires - REFRESH_THRESHOLD;
 const getTokens = async (code, grantType = 'authorization_code') => {
   d(`Getting tokens from PCO via ${grantType}`);
   const codeField = grantType.includes('code') ? 'code' : grantType;
-  const { body } = await got.post(TOKEN_URL, {
-    form: true,
-    json: true,
-    body: {
-      [codeField]: code,
-      grant_type: grantType,
-      client_id: OAUTH_CLIENT_ID,
-      client_secret: OAUTH_SECRET,
-      redirect_uri: CALLBACK_URL,
-    },
+  const body = new URLSearchParams();
+  body.append(codeField, code);
+  body.append('grant_type', grantType);
+  body.append('client_id', OAUTH_CLIENT_ID);
+  body.append('client_secret', OAUTH_SECRET);
+  body.append('redirect_uri', CALLBACK_URL);
+  const res = await fetch(TOKEN_URL, {
+    method: 'POST',
+    body,
   });
+  await checkResponse(res);
   d('Got token response from PCO.');
-  d(body);
+  const json = await res.json();
+  d(json);
   return {
-    accessToken: body.access_token,
-    refreshToken: body.refresh_token,
-    tokenExpires: Date.now() + (body.expires_in * 1000), // Convert expiration to ms
+    accessToken: json.access_token,
+    refreshToken: json.refresh_token,
+    tokenExpires: Date.now() + (json.expires_in * 1000), // Convert expiration to ms
   };
 };
 
@@ -85,14 +95,14 @@ export const pcoAuthenticated = async (req, res, next) => {
  */
 export const get = async (url, { accessToken }) => {
   d(`GETting ${url}`);
-  const { body } = await got(url, {
-    json: true,
+  const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+  await checkResponse(res);
   d(`Resolving ${url}`);
-  return body;
+  return res.json();
 };
 
 const profileUrl = yuri(API_BASE).pathname('people/v2/me').format();
