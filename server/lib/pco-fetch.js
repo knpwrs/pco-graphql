@@ -55,7 +55,10 @@ const bareFetch = curry(async (accessToken, url) => {
  *
  * @param {string} accessToken The PCO access token to use for authorization.
  */
-const fetchFactory = accessToken => throttle(bareFetch(accessToken), LIMIT, INTERVAL);
+const fetchFactory = (accessToken) => {
+  d('Creating fetch function.');
+  return throttle(bareFetch(accessToken), LIMIT, INTERVAL);
+};
 
 /**
  * A memoized version of the above `fetchFactory`. This function is memoized by
