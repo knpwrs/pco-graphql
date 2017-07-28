@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import debug from 'debug';
-import { pcoAuthenticated, authApp } from './auth';
+import { pcoAuthenticated, authApp } from './pco/auth';
 import { getProfile } from './pco';
 import session from './session';
 

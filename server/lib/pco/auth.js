@@ -3,7 +3,7 @@ import yuri from 'yuri';
 import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 import debug from 'debug';
-import { API_BASE } from './pco';
+import { API_BASE } from './';
 
 const d = debug('app:auth');
 

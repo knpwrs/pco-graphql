@@ -1,5 +1,5 @@
 import yuri from 'yuri';
-import fetch from './pco-fetch';
+import fetch from './fetch';
 
 export const API_BASE = 'https://api.planningcenteronline.com/';
 
