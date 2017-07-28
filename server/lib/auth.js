@@ -3,11 +3,11 @@ import yuri from 'yuri';
 import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 import debug from 'debug';
+import { API_BASE } from './pco';
 
 const d = debug('app:auth');
 
 const { CALLBACK_URL, OAUTH_CLIENT_ID, OAUTH_SECRET } = process.env;
-const API_BASE = 'https://api.planningcenteronline.com/';
 const AUTH_URL = yuri(API_BASE)
   .pathname('oauth/authorize')
   .query({
@@ -86,27 +86,6 @@ export const pcoAuthenticated = async (req, res, next) => {
     next(new Error('Not authenticated with PCO!'));
   }
 };
-
-/**
- * Perform authenticated HTTP GET.
- *
- * @param {string} url The url to GET.
- * @param {object} pco The pco session object.
- */
-export const get = async (url, { accessToken }) => {
-  d(`GETting ${url}`);
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  await checkResponse(res);
-  d(`Resolving ${url}`);
-  return res.json();
-};
-
-const profileUrl = yuri(API_BASE).pathname('people/v2/me').format();
-export const getProfile = pco => get(profileUrl, pco);
 
 /**
  * Authentication sub-app.
