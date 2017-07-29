@@ -20,6 +20,7 @@ test.beforeEach(() => {
 
 test.afterEach(() => {
   nock.cleanAll();
+  api.done();
 });
 
 const mockProfile = (t) => {
@@ -35,14 +36,12 @@ test.serial('should perform basic fetch operations', async (t) => {
   mockProfile(t);
   const json = await fetch('1337', profileUrl);
   t.deepEqual(json, profile);
-  api.done();
 });
 
 test.serial('should curry fetch operations', async (t) => {
   mockProfile(t);
   const json = await fetch('1337')(profileUrl);
   t.deepEqual(json, profile);
-  api.done();
 });
 
 test.serial('should throw when unauthorized', async (t) => {
