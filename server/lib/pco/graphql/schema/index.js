@@ -3,7 +3,7 @@ import {
   resolvers as personResolvers,
   schema as personSchema,
 } from './person';
-import { profileUrl } from '../../';
+import { meUrl } from '../../endpoints';
 
 const rootSchema = [`
   type Query {
@@ -18,7 +18,7 @@ const rootSchema = [`
 const rootResolvers = {
   Query: {
     me(root, args, { loader }) {
-      return loader.load(profileUrl);
+      return loader.load(meUrl());
     },
   },
 };
