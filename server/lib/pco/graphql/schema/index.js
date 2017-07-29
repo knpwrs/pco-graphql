@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import { prop } from 'ramda';
-import { profileUrl } from '../';
+import { profileUrl } from '../../';
 
 const rootSchema = [`
   type Query {
@@ -50,9 +50,13 @@ const rootResolvers = {
 
 const schema = [...rootSchema];
 
+const resolvers = {
+  ...rootResolvers,
+};
+
 const executableSchema = makeExecutableSchema({
   typeDefs: schema,
-  resolvers: rootResolvers,
+  resolvers,
 });
 
 export default executableSchema;
