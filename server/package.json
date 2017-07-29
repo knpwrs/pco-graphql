@@ -3,7 +3,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=html ava",
+    "test": "nyc --reporter=lcov --reporter=text --reporter=html ava",
     "lint": "eslint lib",
     "posttest": "npm run lint",
     "dev": "nodemon lib/server --exec babel-node",
