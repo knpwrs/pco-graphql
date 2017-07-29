@@ -36,7 +36,7 @@ const bareFetch = curry(async (accessToken, url) => {
       throw new Error(await res.json());
     }
     if (res.status === 429) {
-      const seconds = res.headers.get('Retry-After');
+      const seconds = parseInt(res.headers.get('Retry-After'), 10);
       d(`Rate limit hit, retrying after ${seconds} seconds.`);
       await delay(seconds * 1000);
     }
