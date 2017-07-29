@@ -3,6 +3,7 @@ import nock from 'nock';
 import fetch, { UnauthorizedError } from './fetch';
 import { API_BASE, profileUrl } from './';
 
+const profileEndpoint = '/people/v2/me';
 const profile = {
   data: {
     type: 'Person',
@@ -25,7 +26,7 @@ test.afterEach(() => {
 
 const mockProfile = (t) => {
   api
-    .get('/people/v2/me')
+    .get(profileEndpoint)
     .reply(200, function profileHandler() {
       t.deepEqual(this.req.headers.authorization, ['Bearer 1337']);
       return profile;
@@ -45,6 +46,18 @@ test.serial('should curry fetch operations', async (t) => {
 });
 
 test.serial('should throw when unauthorized', async (t) => {
-  api.get('/people/v2/me').reply(401);
+  api.get(profileEndpoint).reply(401);
   await t.throws(fetch('1337', profileUrl), UnauthorizedError);
+});
+
+test.serial('should retry when throttled', async (t) => {
+  api.get(profileEndpoint).times(1).reply(429, '', {
+    'Retry-After': '2',
+  });
+  mockProfile(t);
+  const start = Date.now();
+  const json = await fetch('1337')(profileUrl);
+  const end = Date.now();
+  t.true(end - start >= 2000);
+  t.deepEqual(json, profile);
 });
