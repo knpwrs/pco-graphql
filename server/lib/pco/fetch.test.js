@@ -11,17 +11,36 @@ const profile = {
   },
 };
 
-test.afterEach(() => {
-  nock.restore();
+let api = null;
+
+test.beforeEach(() => {
+  nock.disableNetConnect();
+  api = nock(API_BASE);
 });
 
-test.serial('should perform basic fetch operations', async (t) => {
-  nock(API_BASE)
+test.afterEach(() => {
+  nock.cleanAll();
+});
+
+const mockProfile = (t) => {
+  api
     .get('/people/v2/me')
     .reply(200, function profileHandler() {
       t.deepEqual(this.req.headers.authorization, ['Bearer 1337']);
       return profile;
     });
+};
+
+test.serial('should perform basic fetch operations', async (t) => {
+  mockProfile(t);
   const json = await fetch('1337', profileUrl);
   t.deepEqual(json, profile);
+  api.done();
+});
+
+test.serial('should curry fetch operations', async (t) => {
+  mockProfile(t);
+  const json = await fetch('1337')(profileUrl);
+  t.deepEqual(json, profile);
+  api.done();
 });
