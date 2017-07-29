@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
 if [ $# -gt 0 ]; then
-  if [ "$1" == "test" ]; then
+  if [ "$1" == "npm" ]; then
     shift 1
-    docker-compose run --rm server npm test $@
+    docker-compose run --rm server npm "$@"
+  elif [ "$1" == "test" ]; then
+    shift 1
+    docker-compose run --rm server npm test "$@"
   fi
 else
   docker-compose ps
