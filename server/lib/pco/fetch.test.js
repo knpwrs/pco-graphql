@@ -1,6 +1,6 @@
 import test from 'ava';
 import nock from 'nock';
-import fetch from './fetch';
+import fetch, { UnauthorizedError } from './fetch';
 import { API_BASE, profileUrl } from './';
 
 const profile = {
@@ -43,4 +43,9 @@ test.serial('should curry fetch operations', async (t) => {
   const json = await fetch('1337')(profileUrl);
   t.deepEqual(json, profile);
   api.done();
+});
+
+test.serial('should throw when unauthorized', async (t) => {
+  api.get('/people/v2/me').reply(401);
+  await t.throws(fetch('1337', profileUrl), UnauthorizedError);
 });

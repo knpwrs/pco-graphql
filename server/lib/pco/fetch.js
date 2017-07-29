@@ -10,6 +10,12 @@ const d = debug('app:fetch');
 const LIMIT = 100; // 100 requests in...
 const INTERVAL = 20 * 1000; // 20 seconds
 
+export class UnauthorizedError extends Error {
+  constructor() {
+    super('Unauthorized. Did our token get revoked?');
+  }
+}
+
 /**
  * Given an accessToken and a url, fetches the requested resource. Checks to
  * see if we are being throttled by the API server and waits accordingly. This
@@ -32,8 +38,9 @@ const bareFetch = curry(async (accessToken, url) => {
       },
     });
     if (res.status === 401) {
-      d('Unauthorized. Did our token get revoked?');
-      throw new Error(await res.json());
+      const err = new UnauthorizedError();
+      d(err);
+      throw err;
     }
     if (res.status === 429) {
       const seconds = parseInt(res.headers.get('Retry-After'), 10);
