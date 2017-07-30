@@ -1,4 +1,5 @@
 import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
+import { personUrl, peopleUrl } from '../../../endpoints';
 
 export const typeDefs = [`
   type Person {
@@ -57,6 +58,11 @@ export const typeDefs = [`
     updated_at: String
     id: ID
   }
+
+  extend type Query {
+    person(id: ID!): Person
+    people(where: PersonWhereParams, order: String): [Person]
+  }
 `];
 
 export const resolvers = {
@@ -89,5 +95,13 @@ export const resolvers = {
       'emails',
       'phone_numbers',
     ]),
+  },
+  Query: {
+    person(root, { id }, { loader }) {
+      return loader.load(personUrl(id));
+    },
+    people(root, args, { loader }) {
+      return loader.load(peopleUrl(args));
+    },
   },
 };

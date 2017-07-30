@@ -1,5 +1,9 @@
 import test from 'ava';
-import { makeLinkResolvers, makeAttributeResolvers } from './utils';
+import {
+  makeLinkResolvers,
+  makeAttributeResolvers,
+  mergeAllDeep,
+} from './utils';
 
 test('make link resolvers', async (t) => {
   const names = ['foo', 'bar', 'baz', 'cat'];
@@ -33,4 +37,34 @@ test('make attribute resolvers', (t) => {
   };
   const values = names.map(name => resolvers[name](root));
   t.deepEqual(values, ['oof', 'rab', 'zab']);
+});
+
+test('mergeAllDeep', (t) => {
+  t.deepEqual(mergeAllDeep([{
+    foo: {
+      bar: 1,
+      baz: {
+        cat: 'meow',
+      },
+      bird: 'squak',
+    },
+  }, {
+    foo: {
+      baz: {
+        dog: 'woof',
+      },
+      qux: 2,
+      bird: 'tweet',
+    },
+  }]), {
+    foo: {
+      bar: 1,
+      qux: 2,
+      bird: 'tweet',
+      baz: {
+        cat: 'meow',
+        dog: 'woof',
+      },
+    },
+  });
 });

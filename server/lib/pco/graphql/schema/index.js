@@ -1,12 +1,11 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import { typeDefs, typeResolvers } from './types';
-import { meUrl, personUrl, peopleUrl } from '../../endpoints';
+import { mergeAllDeep } from './utils';
+import { meUrl } from '../../endpoints';
 
 const rootTypeDefs = [`
   type Query {
     me: Person
-    person(id: ID!): Person
-    people(where: PersonWhereParams, order: String): [Person]
   }
 
   schema {
@@ -19,12 +18,6 @@ const rootResolvers = {
     me(root, args, { loader }) {
       return loader.load(meUrl());
     },
-    person(root, { id }, { loader }) {
-      return loader.load(personUrl(id));
-    },
-    people(root, args, { loader }) {
-      return loader.load(peopleUrl(args));
-    },
   },
 };
 
@@ -33,10 +26,10 @@ const schema = [
   ...typeDefs,
 ];
 
-const resolvers = {
-  ...rootResolvers,
-  ...typeResolvers,
-};
+const resolvers = mergeAllDeep([
+  rootResolvers,
+  typeResolvers,
+]);
 
 const executableSchema = makeExecutableSchema({
   typeDefs: schema,

@@ -1,4 +1,11 @@
-import { compose, reduce, merge, map, path } from 'ramda';
+import {
+  compose,
+  reduce,
+  merge,
+  map,
+  path,
+  mergeDeepRight,
+} from 'ramda';
 
 export const makeLinkResolvers = compose(
   reduce(merge, {}),
@@ -17,3 +24,5 @@ export const makeAttributeResolvers = compose(
     [key]: path(['attributes', key]),
   })),
 );
+
+export const mergeAllDeep = reduce(mergeDeepRight, {});
