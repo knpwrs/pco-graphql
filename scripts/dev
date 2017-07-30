@@ -7,6 +7,9 @@ if [ $# -gt 0 ]; then
   elif [ "$1" == "test" ]; then
     shift 1
     docker-compose run --rm server npm test "$@"
+  elif [ "$1" == "test:watch" ]; then
+    shift 1
+    docker-compose run --rm server npm run test:watch "$@"
   fi
 else
   docker-compose ps
