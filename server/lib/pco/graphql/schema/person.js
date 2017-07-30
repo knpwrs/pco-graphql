@@ -1,9 +1,13 @@
 import { prop } from 'ramda';
+import makeLinkResolvers from './make-link-resolvers';
 
 export const schema = [`
   type Person {
     id: ID!
     attributes: PersonAttributes
+
+    # Linked Types
+    addresses: [Address]
   }
 
   type PersonAttributes {
@@ -30,5 +34,8 @@ export const schema = [`
 `];
 
 export const resolvers = {
-  PersonAttributes: prop('attributes'),
+  Person: {
+    attributes: prop('attributes'),
+    ...makeLinkResolvers(['addresses']),
+  },
 };
