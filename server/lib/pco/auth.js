@@ -1,4 +1,4 @@
-import express from 'express';
+import promiseRouter from 'express-promise-router';
 import yuri from 'yuri';
 import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
@@ -90,7 +90,7 @@ export const pcoAuthenticated = async (req, res, next) => {
 /**
  * Authentication sub-app.
  */
-export const authApp = express();
+export const authApp = promiseRouter();
 
 // Redirects user to pco authentication page.
 authApp.get('/pco', (req, res) => {
