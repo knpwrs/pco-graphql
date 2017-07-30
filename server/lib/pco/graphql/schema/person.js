@@ -27,6 +27,7 @@ export const schema = [`
 
     # Linked Types
     addresses: [Address]
+    apps: [App]
   }
 `];
 
@@ -53,6 +54,9 @@ export const resolvers = {
       'status',
       'updated_at',
     ]),
-    ...makeLinkResolvers(['addresses']),
+    ...makeLinkResolvers([
+      'addresses',
+      'apps',
+    ]),
   },
 };

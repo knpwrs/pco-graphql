@@ -7,6 +7,10 @@ import {
   resolvers as addressResolvers,
   schema as addressSchema,
 } from './address';
+import {
+  resolvers as appResolvers,
+  schema as appSchema,
+} from './app';
 import { meUrl } from '../../endpoints';
 
 const rootSchema = [`
@@ -31,12 +35,14 @@ const schema = [
   ...rootSchema,
   ...personSchema,
   ...addressSchema,
+  ...appSchema,
 ];
 
 const resolvers = {
   ...rootResolvers,
   ...personResolvers,
   ...addressResolvers,
+  ...appResolvers,
 };
 
 const executableSchema = makeExecutableSchema({
