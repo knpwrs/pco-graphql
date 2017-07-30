@@ -15,11 +15,12 @@ import {
   resolvers as emailResolvers,
   schema as emailSchema,
 } from './email';
-import { meUrl } from '../../endpoints';
+import { meUrl, personUrl } from '../../endpoints';
 
 const rootSchema = [`
   type Query {
     me: Person
+    person(id: ID!): Person
   }
 
   schema {
@@ -31,6 +32,9 @@ const rootResolvers = {
   Query: {
     me(root, args, { loader }) {
       return loader.load(meUrl());
+    },
+    person(root, { id }, { loader }) {
+      return loader.load(personUrl(id));
     },
   },
 };
