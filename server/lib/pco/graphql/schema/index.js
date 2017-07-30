@@ -6,7 +6,7 @@ const rootTypeDefs = [`
   type Query {
     me: Person
     person(id: ID!): Person
-    people(where: PersonWhereParams): [Person]
+    people(where: PersonWhereParams, order: String): [Person]
   }
 
   schema {
