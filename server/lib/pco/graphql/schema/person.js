@@ -29,6 +29,7 @@ export const schema = [`
     addresses: [Address]
     apps: [App]
     connected_people: [Person]
+    emails: [Email]
   }
 `];
 
@@ -59,6 +60,7 @@ export const resolvers = {
       'addresses',
       'apps',
       'connected_people',
+      'emails',
     ]),
   },
 };

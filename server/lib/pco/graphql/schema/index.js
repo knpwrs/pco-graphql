@@ -11,6 +11,10 @@ import {
   resolvers as appResolvers,
   schema as appSchema,
 } from './app';
+import {
+  resolvers as emailResolvers,
+  schema as emailSchema,
+} from './email';
 import { meUrl } from '../../endpoints';
 
 const rootSchema = [`
@@ -36,6 +40,7 @@ const schema = [
   ...personSchema,
   ...addressSchema,
   ...appSchema,
+  ...emailSchema,
 ];
 
 const resolvers = {
@@ -43,6 +48,7 @@ const resolvers = {
   ...personResolvers,
   ...addressResolvers,
   ...appResolvers,
+  ...emailResolvers,
 };
 
 const executableSchema = makeExecutableSchema({
