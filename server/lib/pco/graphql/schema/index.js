@@ -1,11 +1,12 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import { typeDefs, typeResolvers } from './types';
-import { meUrl, personUrl } from '../../endpoints';
+import { meUrl, personUrl, peopleUrl } from '../../endpoints';
 
 const rootTypeDefs = [`
   type Query {
     me: Person
     person(id: ID!): Person
+    people(where: PersonWhereParams): [Person]
   }
 
   schema {
@@ -20,6 +21,9 @@ const rootResolvers = {
     },
     person(root, { id }, { loader }) {
       return loader.load(personUrl(id));
+    },
+    people(root, args, { loader }) {
+      return loader.load(peopleUrl(args));
     },
   },
 };

@@ -32,6 +32,31 @@ export const typeDefs = [`
     emails: [Email]
     phone_numbers: [PhoneNumber]
   }
+
+  input PersonWhereParams {
+    given_name: String
+    first_name: String
+    nickname: String
+    goes_by_name: String
+    middle_name: String
+    last_name: String
+    birthdate: String
+    anniversary: String
+    gender: String
+    grade: Int
+    child: Boolean
+    status: String
+    school_type: String
+    graduation_year: Int
+    site_administrator: Boolean
+    people_permissions: String
+    membership: String
+    remote_id: Int
+    medical_notes: String
+    created_at: String
+    updated_at: String
+    id: ID
+  }
 `];
 
 export const resolvers = {
