@@ -1,6 +1,6 @@
-import { makeLinkResolvers, makeAttributeResolvers } from './utils';
+import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
 
-export const schema = [`
+export const typeDefs = [`
   type Person {
     id: ID!
 

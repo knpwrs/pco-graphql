@@ -1,6 +1,6 @@
-import { makeAttributeResolvers } from './utils';
+import { makeAttributeResolvers } from '../utils';
 
-export const schema = [`
+export const typeDefs = [`
   type Address {
     id: ID!
     city: String
