@@ -2,7 +2,7 @@ import test from 'ava';
 import { makeLinkResolvers, makeAttributeResolvers } from './utils';
 
 test('make link resolvers', async (t) => {
-  const names = ['foo', 'bar', 'baz', 'qux'];
+  const names = ['foo', 'bar', 'baz', 'cat'];
   const resolvers = makeLinkResolvers(names);
   const context = {
     loader: {
@@ -14,11 +14,11 @@ test('make link resolvers', async (t) => {
       foo: 'oof',
       bar: 'rab',
       baz: 'zab',
-      qux: null,
+      self: 'self',
     },
   };
   const values = await Promise.all(names.map(name => resolvers[name](root, null, context)));
-  t.deepEqual(values, ['OOF', 'RAB', 'ZAB', null]);
+  t.deepEqual(values, ['OOF', 'RAB', 'ZAB', 'SELF/CAT']);
 });
 
 test('make attribute resolvers', (t) => {
