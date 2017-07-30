@@ -1,6 +1,6 @@
 import yuri from 'yuri';
 
-export const API_BASE = 'https://api.planningcenteronline.com/';
+export const API_BASE = 'https://api.planningcenteronline.com';
 const base = () => yuri(API_BASE);
 
 const people = '/people/v2';
