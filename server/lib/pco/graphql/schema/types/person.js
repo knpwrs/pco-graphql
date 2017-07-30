@@ -7,7 +7,7 @@ export const typeDefs = [`
     # Attribute Types
     anniversary: String
     avatar: String!
-    birthdate: String!
+    birthdate: String
     child: Boolean!
     created_at: String!
     demographic_avatar_url: String!
