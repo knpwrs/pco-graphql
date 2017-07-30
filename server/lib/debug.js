@@ -1,6 +1,7 @@
 import promiseRouter from 'express-promise-router';
 import debug from 'debug';
 import yuri from 'yuri';
+import qs from 'qs';
 import { graphiqlExpress } from 'apollo-server-express';
 import { pcoAuthenticated } from './pco/auth';
 import { API_BASE } from './pco/endpoints';
@@ -23,7 +24,9 @@ app.get(/\/api\/(.+)/, pcoAuthenticated, async (req, res) => {
     query,
     session: { pco: { accessToken } },
   } = req;
-  const url = yuri(API_BASE).pathname(pathname).query(query).format();
+  // yuri doesn't support extended query strings
+  const search = qs.stringify(query);
+  const url = yuri(API_BASE).pathname(pathname).search(search).format();
   d(`GETting ${url}`);
   res.json(await fetch(accessToken, url));
 });
