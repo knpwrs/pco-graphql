@@ -16,6 +16,12 @@ export class UnauthorizedError extends Error {
   }
 }
 
+export class NotFoundError extends Error {
+  constructor(resource) {
+    super(`Resource not found: ${resource}`);
+  }
+}
+
 /**
  * Given an accessToken and a url, fetches the requested resource. Checks to
  * see if we are being throttled by the API server and waits accordingly. This
@@ -39,6 +45,11 @@ const bareFetch = curry(async (accessToken, url) => {
     });
     if (res.status === 401) {
       const err = new UnauthorizedError();
+      d(err);
+      throw err;
+    }
+    if (res.status === 404) {
+      const err = new NotFoundError(url);
       d(err);
       throw err;
     }

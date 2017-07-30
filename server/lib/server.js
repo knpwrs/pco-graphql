@@ -2,9 +2,10 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import debug from 'debug';
-import { pcoAuthenticated, authApp } from './pco/auth';
-import { getProfile } from './pco';
+import { authApp } from './pco/auth';
+import graphql from './pco/graphql';
 import session from './session';
+import debugApp from './debug';
 
 const d = debug('app:server');
 const PORT = 8000;
@@ -19,10 +20,9 @@ app.use(bodyParser.json());
 app.use(session);
 
 app.use('/auth', authApp);
+app.use('/graphql', graphql);
+app.use('/debug', debugApp);
 
-app.get('/profile.json', pcoAuthenticated, async (req, res) => {
-  res.json(await getProfile(req.session.pco));
-});
 app.get('/', (req, res) => res.end('Hello!'));
 
 app.listen(PORT, () => {
