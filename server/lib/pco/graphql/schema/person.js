@@ -1,16 +1,10 @@
-import { prop } from 'ramda';
-import makeLinkResolvers from './make-link-resolvers';
+import { makeLinkResolvers, makeAttributeResolvers } from './utils';
 
 export const schema = [`
   type Person {
     id: ID!
-    attributes: PersonAttributes
 
-    # Linked Types
-    addresses: [Address]
-  }
-
-  type PersonAttributes {
+    # Attribute Types
     anniversary: String
     avatar: String!
     birthdate: String!
@@ -30,12 +24,35 @@ export const schema = [`
     site_administrator: Boolean!
     status: String!
     updated_at: String!
+
+    # Linked Types
+    addresses: [Address]
   }
 `];
 
 export const resolvers = {
   Person: {
-    attributes: prop('attributes'),
+    ...makeAttributeResolvers([
+      'anniversary',
+      'avatar',
+      'birthdate',
+      'child',
+      'created_at',
+      'demographic_avatar_url',
+      'first_name',
+      'gender',
+      'given_name',
+      'goes_by_name',
+      'grade',
+      'graduation_year',
+      'last_name',
+      'medical_notes',
+      'membership',
+      'remote_id',
+      'site_administrator',
+      'status',
+      'updated_at',
+    ]),
     ...makeLinkResolvers(['addresses']),
   },
 };

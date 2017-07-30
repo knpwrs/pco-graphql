@@ -1,5 +1,5 @@
 import test from 'ava';
-import makeLinkResolvers from './make-link-resolvers';
+import { makeLinkResolvers, makeAttributeResolvers } from './utils';
 
 test('make link resolvers', async (t) => {
   const names = ['foo', 'bar', 'baz', 'qux'];
@@ -19,4 +19,18 @@ test('make link resolvers', async (t) => {
   };
   const values = await Promise.all(names.map(name => resolvers[name](root, null, context)));
   t.deepEqual(values, ['OOF', 'RAB', 'ZAB', null]);
+});
+
+test('make attribute resolvers', (t) => {
+  const names = ['foo', 'bar', 'baz'];
+  const resolvers = makeAttributeResolvers(names);
+  const root = {
+    attributes: {
+      foo: 'oof',
+      bar: 'rab',
+      baz: 'zab',
+    },
+  };
+  const values = names.map(name => resolvers[name](root));
+  t.deepEqual(values, ['oof', 'rab', 'zab']);
 });

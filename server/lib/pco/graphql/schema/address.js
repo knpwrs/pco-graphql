@@ -1,12 +1,8 @@
-import { prop } from 'ramda';
+import { makeAttributeResolvers } from './utils';
 
 export const schema = [`
   type Address {
     id: ID!
-    attributes: AddressAttributes
-  }
-
-  type AddressAttributes {
     city: String
     location: String
     primary: Boolean
@@ -18,6 +14,14 @@ export const schema = [`
 
 export const resolvers = {
   Address: {
-    attributes: prop('attributes'),
+    ...makeAttributeResolvers([
+      'id',
+      'city',
+      'location',
+      'primary',
+      'state',
+      'street',
+      'zip',
+    ]),
   },
 };
