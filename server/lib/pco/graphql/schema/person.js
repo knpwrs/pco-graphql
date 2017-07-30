@@ -30,6 +30,7 @@ export const schema = [`
     apps: [App]
     connected_people: [Person]
     emails: [Email]
+    phone_numbers: [PhoneNumber]
   }
 `];
 
@@ -61,6 +62,7 @@ export const resolvers = {
       'apps',
       'connected_people',
       'emails',
+      'phone_numbers',
     ]),
   },
 };
