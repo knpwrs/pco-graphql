@@ -1,6 +1,6 @@
 import test from 'ava';
 import nock from 'nock';
-import fetch, { UnauthorizedError } from './fetch';
+import fetch, { UnauthorizedError, NotFoundError } from './fetch';
 import { me, meUrl, API_BASE } from './endpoints';
 
 const profileEndpoint = me();
@@ -49,6 +49,11 @@ test.serial('should curry fetch operations', async (t) => {
 test.serial('should throw when unauthorized', async (t) => {
   api.get(profileEndpoint).reply(401);
   await t.throws(fetch('1337', profileUrl), UnauthorizedError);
+});
+
+test.serial('should throw when not found', async (t) => {
+  api.get(profileEndpoint).reply(404);
+  await t.throws(fetch('1337', profileUrl), NotFoundError);
 });
 
 test.serial('should retry when throttled', async (t) => {
