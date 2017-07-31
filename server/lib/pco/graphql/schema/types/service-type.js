@@ -19,7 +19,7 @@ export const typeDefs = [`
 
   extend type Query {
     serviceType(id: ID!): ServiceType
-    serviceTypes: [ServiceType]
+    serviceTypes(nameLike: String): [ServiceType]
   }
 `];
 
@@ -41,8 +41,12 @@ export const resolvers = {
     serviceType(root, { id }, { loader }) {
       return loader.load(serviceTypeUrl(id));
     },
-    serviceTypes(root, args, { loader }) {
-      return loader.load(serviceTypesUrl(args));
+    serviceTypes: async (root, { nameLike }, { loader }) => {
+      const serviceTypes = await loader.load(serviceTypesUrl());
+      if (nameLike) {
+        return serviceTypes.filter(type => type.attributes.name.includes(nameLike));
+      }
+      return serviceTypes;
     },
   },
 };
