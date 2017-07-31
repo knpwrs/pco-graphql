@@ -10,6 +10,9 @@ if [ $# -gt 0 ]; then
   elif [ "$1" == "test:watch" ]; then
     shift 1
     docker-compose run --rm server npm run test:watch "$@"
+  else
+    echo "dev: Command not found."
+    exit 1
   fi
 else
   docker-compose ps
