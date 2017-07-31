@@ -6,6 +6,7 @@ import {
   path,
   mergeDeepRight,
 } from 'ramda';
+import yuri from 'yuri';
 
 export const makeLinkResolvers = compose(
   reduce(merge, {}),
@@ -13,7 +14,7 @@ export const makeLinkResolvers = compose(
     [key]: async (root, args, { loader }) => {
       const link = root.links[key] || `${root.links.self}/${key}`;
       if (!link) return null;
-      return loader.load(link);
+      return loader.load(yuri(link).query(args).format());
     },
   })),
 );
