@@ -36,8 +36,7 @@
     "passport": "^0.3.2",
     "passport-oauth2": "^1.4.0",
     "qs": "^6.5.0",
-    "ramda": "^0.24.1",
-    "yuri": "^1.0.3"
+    "ramda": "^0.24.1"
   },
   "devDependencies": {
     "ava": "^0.21.0",

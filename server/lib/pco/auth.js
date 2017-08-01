@@ -1,5 +1,5 @@
 import promiseRouter from 'express-promise-router';
-import yuri from 'yuri';
+import qs from 'qs';
 import fetch from 'node-fetch';
 import { URLSearchParams } from 'url';
 import debug from 'debug';
@@ -8,18 +8,14 @@ import { API_BASE } from './api';
 const d = debug('app:auth');
 
 const { CALLBACK_URL, OAUTH_CLIENT_ID, OAUTH_SECRET } = process.env;
-const AUTH_URL = yuri(API_BASE)
-  .pathname('oauth/authorize')
-  .query({
-    client_id: OAUTH_CLIENT_ID,
-    redirect_uri: CALLBACK_URL,
-    response_type: 'code',
-    scope: 'people services',
-  })
-  .format();
-const TOKEN_URL = yuri(API_BASE)
-  .pathname('oauth/token')
-  .format();
+const AUTH_QUERY = qs.stringify({
+  client_id: OAUTH_CLIENT_ID,
+  redirect_uri: CALLBACK_URL,
+  response_type: 'code',
+  scope: 'people services',
+});
+const AUTH_URL = `${API_BASE}/oauth/authorize?${AUTH_QUERY}`;
+const TOKEN_URL = `${API_BASE}/oauth/token`;
 const REFRESH_THRESHOLD = 5 * 60 * 1000; // Five minutes
 
 /**

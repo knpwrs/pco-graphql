@@ -6,7 +6,6 @@ import {
   path,
   mergeDeepRight,
 } from 'ramda';
-import yuri from 'yuri';
 import qs from 'qs';
 import { getResourceUrl } from '../../api';
 
@@ -17,7 +16,8 @@ export const makeLinkResolvers = compose(
   map(key => ({
     [key]: async (root, args, { loader }) => {
       const link = root.links[key] || `${root.links.self}/${key}`;
-      return loader.load(yuri(link).search(qs.stringify(args)).format());
+      const query = qs.stringify(args);
+      return loader.load(`${link}${query ? `?${query}` : ''}`);
     },
   })),
 );
