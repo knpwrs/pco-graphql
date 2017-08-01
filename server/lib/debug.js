@@ -13,9 +13,10 @@ const app = promiseRouter();
 // All requests through the graphql endpoint must be authenticated
 app.use(pcoAuthenticated);
 
-app.use('/graphiql', pcoAuthenticated, graphiqlExpress({
+app.use('/graphiql', pcoAuthenticated, graphiqlExpress(req => ({
   endpointURL: '/graphql',
-}));
+  passHeader: `'X-CSRF-Token': '${req.csrfToken()}',`,
+})));
 
 app.get(/\/api\/(.+)/, pcoAuthenticated, async (req, res) => {
   const {
