@@ -4,7 +4,7 @@ import yuri from 'yuri';
 import qs from 'qs';
 import { graphiqlExpress } from 'apollo-server-express';
 import { pcoAuthenticated } from './pco/auth';
-import { API_BASE } from './pco/endpoints';
+import { API_BASE } from './pco/api';
 import fetch, { NotFoundError } from './pco/fetch';
 
 const d = debug('app:debug');

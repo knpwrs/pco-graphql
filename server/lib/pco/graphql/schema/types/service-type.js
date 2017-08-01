@@ -1,5 +1,5 @@
 import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
-import { serviceTypeUrl, serviceTypesUrl } from '../../../endpoints';
+import { getResourceUrl, getTypeUrl } from '../../../api';
 
 export const typeDefs = [`
   type ServiceType {
@@ -39,10 +39,10 @@ export const resolvers = {
   },
   Query: {
     serviceType(root, { id }, { loader }) {
-      return loader.load(serviceTypeUrl(id));
+      return loader.load(getResourceUrl('services', 'service_types', id));
     },
     serviceTypes: async (root, { nameLike }, { loader }) => {
-      const serviceTypes = await loader.load(serviceTypesUrl());
+      const serviceTypes = await loader.load(getTypeUrl('services', 'service_types'));
       if (nameLike) {
         return serviceTypes.filter(type => type.attributes.name.includes(nameLike));
       }

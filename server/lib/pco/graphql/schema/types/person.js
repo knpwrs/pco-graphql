@@ -1,5 +1,5 @@
 import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
-import { personUrl, peopleUrl } from '../../../endpoints';
+import { getResourceUrl, getQueryUrl } from '../../../api';
 
 export const typeDefs = [`
   type Person {
@@ -98,10 +98,10 @@ export const resolvers = {
   },
   Query: {
     person(root, { id }, { loader }) {
-      return loader.load(personUrl(id));
+      return loader.load(getResourceUrl('people', 'people', id));
     },
     people(root, args, { loader }) {
-      return loader.load(peopleUrl(args));
+      return loader.load(getQueryUrl('people', 'people', args));
     },
   },
 };

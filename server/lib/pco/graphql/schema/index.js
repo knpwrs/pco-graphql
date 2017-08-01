@@ -1,7 +1,7 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import { typeDefs, typeResolvers } from './types';
 import { mergeAllDeep } from './utils';
-import { meUrl } from '../../endpoints';
+import { getTypeUrl } from '../../api';
 
 const rootTypeDefs = [`
   type Query {
@@ -16,7 +16,7 @@ const rootTypeDefs = [`
 const rootResolvers = {
   Query: {
     me(root, args, { loader }) {
-      return loader.load(meUrl());
+      return loader.load(getTypeUrl('people', 'me'));
     },
   },
 };

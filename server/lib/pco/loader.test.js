@@ -1,10 +1,10 @@
 import test from 'ava';
 import nock from 'nock';
 import makeLoader from './loader';
-import { API_BASE, me, meUrl } from './endpoints';
+import { API_BASE } from './api';
 
-const profileEndpoint = me();
-const profileUrl = meUrl();
+const profileEndpoint = '/people/v2/me';
+const profileUrl = `${API_BASE}${profileEndpoint}`;
 const profileResponse = {
   data: {
     type: 'Person',

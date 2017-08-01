@@ -1,10 +1,10 @@
 import test from 'ava';
 import nock from 'nock';
 import fetch, { UnauthorizedError, NotFoundError } from './fetch';
-import { me, meUrl, API_BASE } from './endpoints';
+import { API_BASE } from './api';
 
-const profileEndpoint = me();
-const profileUrl = meUrl();
+const profileEndpoint = '/people/v2/me';
+const profileUrl = `${API_BASE}${profileEndpoint}`;
 const profile = {
   data: {
     type: 'Person',
