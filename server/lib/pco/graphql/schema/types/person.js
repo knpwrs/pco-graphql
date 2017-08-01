@@ -2,10 +2,10 @@ import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
 import { getResourceUrl, getQueryUrl } from '../../../api';
 
 export const typeDefs = [`
+  # A person added to PCO Services.
   type Person {
     id: ID!
 
-    # Attribute Types
     anniversary: String
     avatar: String!
     birthdate: String
@@ -26,7 +26,6 @@ export const typeDefs = [`
     status: String!
     updated_at: String!
 
-    # Linked Types
     addresses: [Address]
     apps: [App]
     connected_people: [Person]
@@ -34,6 +33,7 @@ export const typeDefs = [`
     phone_numbers: [PhoneNumber]
   }
 
+  # Search parameters to find people.
   input PersonWhereParams {
     given_name: String
     first_name: String
@@ -60,7 +60,9 @@ export const typeDefs = [`
   }
 
   extend type Query {
+    # Find an invidiual person by ID.
     person(id: ID!): Person
+    # Find people matching given parameters.
     people(where: PersonWhereParams, order: String): [Person]
   }
 `];

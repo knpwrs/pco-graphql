@@ -1,10 +1,10 @@
 import { makeAttributeResolvers } from '../utils';
 
 export const typeDefs = [`
+  # A phone number represents a single telephone number and location.
   type PhoneNumber {
     id: ID!
 
-    # Attribute Types
     carrier: String!
     created_at: String!
     location: String!

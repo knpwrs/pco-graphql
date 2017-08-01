@@ -1,6 +1,7 @@
 import { makeAttributeResolvers } from '../utils';
 
 export const typeDefs = [`
+  # An address represents a physical and/or mailing address for a person.
   type Address {
     id: ID!
     city: String

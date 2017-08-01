@@ -3,6 +3,7 @@ import {
 } from '../utils';
 
 export const typeDefs = [`
+  # A song
   type Song {
     id: ID!
 

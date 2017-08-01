@@ -1,10 +1,10 @@
 import { makeAttributeResolvers } from '../utils';
 
 export const typeDefs = [`
+  # An email represents an email address and location.
   type Email {
     id: ID!
 
-    # Attribute Types
     address: String!
     location: String!
     primary: Boolean!

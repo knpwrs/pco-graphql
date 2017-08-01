@@ -4,15 +4,14 @@ import {
 } from '../utils';
 
 export const typeDefs = [`
+  # An Item in a Plan.
   type Item {
     id: ID!
 
-    # Attribute Types
     created_at: String!
     item_type: String
     title: String
 
-    # Linked Types
     song: Song
   }
 `];

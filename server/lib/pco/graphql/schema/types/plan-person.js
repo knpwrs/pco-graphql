@@ -1,10 +1,10 @@
 import { makeRelationshipResolvers, makeAttributeResolvers } from '../utils';
 
 export const typeDefs = [`
+  # A person scheduled within a specific plan.
   type PlanPerson {
     id: ID!
 
-    # Attribute Types
     created_at: String!
     decline_reason: String
     name: String
@@ -12,7 +12,7 @@ export const typeDefs = [`
     team_position_name: String
     updated_at: String
 
-    # Relationship Types
+    # The actual Person object this PlanPerson represents.
     person: Person
   }
 `];

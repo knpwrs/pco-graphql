@@ -2,10 +2,10 @@ import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
 import { getResourceUrl, getTypeUrl } from '../../../api';
 
 export const typeDefs = [`
+  # A Service Type is a container for plans.
   type ServiceType {
     id: ID!
 
-    # Attribute Types
     created_at: String!
     frequency: String!
     name: String!
@@ -13,12 +13,13 @@ export const typeDefs = [`
     sequence: Int!
     updated_at: String!
 
-    # Linked Types
     plans(order: String, filter: String): [Plan]
   }
 
   extend type Query {
+    # Find an invidiual service type by ID.
     serviceType(id: ID!): ServiceType
+    # Find service types with a name that includes a given string.
     serviceTypes(nameLike: String): [ServiceType]
   }
 `];

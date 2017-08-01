@@ -1,16 +1,16 @@
 import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
 
 export const typeDefs = [`
+  # A single plan within a Service Type.
   type Plan {
     id: ID!
 
-    # Attribute Types
     created_at: String!
     dates: String!
     title: String
 
-    # Linked Types
     items: [Item]
+    # People scheduled for this plan.
     team_members: [PlanPerson]
   }
 `];
