@@ -1,5 +1,6 @@
 import {
   makeAttributeResolvers,
+  makeLinkResolvers,
 } from '../utils';
 
 export const typeDefs = [`
@@ -7,7 +8,6 @@ export const typeDefs = [`
   type Song {
     id: ID!
 
-    # Attribute Types
     admin: String
     author: String
     ccli_number: Int
@@ -17,6 +17,8 @@ export const typeDefs = [`
     themes: String
     title: String
     updated_at: String
+
+    attachments: [Attachment]
   }
 `];
 
@@ -32,6 +34,9 @@ export const resolvers = {
       'themes',
       'title',
       'updated_at',
+    ]),
+    ...makeLinkResolvers([
+      'attachments',
     ]),
   },
 };
