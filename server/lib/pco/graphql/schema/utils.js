@@ -24,7 +24,7 @@ export const makeLinkResolvers = compose(
 
 export const makeRelationshipResolvers = compose(
   reduce(merge, {}),
-  map(([key, api, resource]) => ({
+  map(({ key, api, resource }) => ({
     [key]: async (root, args, { loader }) => {
       const { data } = root.relationships[key];
       if (!data) return null;

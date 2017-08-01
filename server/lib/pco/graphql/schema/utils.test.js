@@ -29,9 +29,9 @@ test('make link resolvers', async (t) => {
 
 test('make relationship resolvers', async (t) => {
   const args = [
-    ['person', 'people', 'people'],
-    ['plan', 'services', 'plans'],
-    ['song', 'services', 'songs'],
+    { key: 'person', api: 'people', resource: 'people' },
+    { key: 'plan', api: 'services', resource: 'plans' },
+    { key: 'song', api: 'services', resource: 'songs' },
   ];
   const resolvers = makeRelationshipResolvers(args);
   const context = {
@@ -58,7 +58,7 @@ test('make relationship resolvers', async (t) => {
       },
     },
   };
-  const values = await Promise.all(args.map(([key]) => resolvers[key](root, null, context)));
+  const values = await Promise.all(args.map(({ key }) => resolvers[key](root, null, context)));
   t.deepEqual(values, [
     getResourceUrl('people', 'people', '1337'),
     getResourceUrl('services', 'plans', '7331'),

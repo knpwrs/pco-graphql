@@ -28,7 +28,7 @@ export const resolvers = {
       'updated_at',
     ]),
     ...makeRelationshipResolvers([
-      ['person', 'people', 'people'],
+      { key: 'person', api: 'people', resource: 'people' },
     ]),
   },
 };

@@ -24,7 +24,7 @@ export const resolvers = {
       'title',
     ]),
     ...makeRelationshipResolvers([
-      ['song', 'services', 'songs'],
+      { key: 'song', api: 'services', resource: 'songs' },
     ]),
   },
 };
