@@ -1,9 +1,11 @@
 import test from 'ava';
 import {
   makeLinkResolvers,
+  makeRelationshipResolvers,
   makeAttributeResolvers,
   mergeAllDeep,
 } from './utils';
+import { getResourceUrl } from '../../api';
 
 test('make link resolvers', async (t) => {
   const names = ['foo', 'bar', 'baz', 'cat'];
@@ -23,6 +25,45 @@ test('make link resolvers', async (t) => {
   };
   const values = await Promise.all(names.map(name => resolvers[name](root, null, context)));
   t.deepEqual(values, ['OOF', 'RAB', 'ZAB', 'SELF/CAT']);
+});
+
+test('make relationship resolvers', async (t) => {
+  const args = [
+    ['person', 'people', 'people'],
+    ['plan', 'services', 'plans'],
+    ['song', 'services', 'songs'],
+  ];
+  const resolvers = makeRelationshipResolvers(args);
+  const context = {
+    loader: {
+      load: async key => key, // async identity
+    },
+  };
+  const root = {
+    relationships: {
+      person: {
+        data: {
+          type: 'Person',
+          id: '1337',
+        },
+      },
+      plan: {
+        data: {
+          type: 'Plan',
+          id: '7331',
+        },
+      },
+      song: {
+        data: null,
+      },
+    },
+  };
+  const values = await Promise.all(args.map(([key]) => resolvers[key](root, null, context)));
+  t.deepEqual(values, [
+    getResourceUrl('people', 'people', '1337'),
+    getResourceUrl('services', 'plans', '7331'),
+    null,
+  ]);
 });
 
 test('make attribute resolvers', (t) => {

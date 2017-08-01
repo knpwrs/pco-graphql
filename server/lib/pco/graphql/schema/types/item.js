@@ -1,4 +1,7 @@
-import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
+import {
+  makeRelationshipResolvers,
+  makeAttributeResolvers,
+} from '../utils';
 
 export const typeDefs = [`
   type Item {
@@ -10,6 +13,7 @@ export const typeDefs = [`
     title: String
 
     # Linked Types
+    song: Song
   }
 `];
 
@@ -20,7 +24,8 @@ export const resolvers = {
       'item_type',
       'title',
     ]),
-    ...makeLinkResolvers([
+    ...makeRelationshipResolvers([
+      ['song', 'services', 'songs'],
     ]),
   },
 };

@@ -6,6 +6,7 @@ import { resolvers as phoneNumberResolvers, typeDefs as phoneNumberTypeDefs } fr
 import { resolvers as serviceTypeResolvers, typeDefs as serviceTypeTypeDefs } from './service-type';
 import { resolvers as planResolvers, typeDefs as planTypeDefs } from './plan';
 import { resolvers as itemResolvers, typeDefs as itemTypeDefs } from './item';
+import { resolvers as songResolvers, typeDefs as songTypeDefs } from './song';
 import { mergeAllDeep } from '../utils';
 
 export const typeResolvers = mergeAllDeep([
@@ -17,6 +18,7 @@ export const typeResolvers = mergeAllDeep([
   serviceTypeResolvers,
   planResolvers,
   itemResolvers,
+  songResolvers,
 ]);
 
 export const typeDefs = [
@@ -28,4 +30,5 @@ export const typeDefs = [
   ...serviceTypeTypeDefs,
   ...planTypeDefs,
   ...itemTypeDefs,
+  ...songTypeDefs,
 ];
