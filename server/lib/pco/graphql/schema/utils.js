@@ -7,20 +7,23 @@ import {
   mergeDeepRight,
 } from 'ramda';
 import yuri from 'yuri';
+import qs from 'qs';
+
+const reduceMerge = reduce(merge, {});
 
 export const makeLinkResolvers = compose(
-  reduce(merge, {}),
+  reduceMerge,
   map(key => ({
     [key]: async (root, args, { loader }) => {
       const link = root.links[key] || `${root.links.self}/${key}`;
       if (!link) return null;
-      return loader.load(yuri(link).query(args).format());
+      return loader.load(yuri(link).search(qs.stringify(args)).format());
     },
   })),
 );
 
 export const makeAttributeResolvers = compose(
-  reduce(merge, {}),
+  reduceMerge,
   map(key => ({
     [key]: path(['attributes', key]),
   })),
