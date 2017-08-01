@@ -4,7 +4,7 @@ import makeLoader from './loader';
 import { API_BASE } from './api';
 
 const profileEndpoint = '/people/v2/me';
-const profileUrl = `${API_BASE}${profileEndpoint}`;
+const profileUrl = API_BASE + profileEndpoint;
 const profileResponse = {
   data: {
     type: 'Person',
