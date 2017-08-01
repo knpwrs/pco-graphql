@@ -11,6 +11,7 @@ export const typeDefs = [`
 
     # Linked Types
     items: [Item]
+    team_members: [PlanPerson]
   }
 `];
 
@@ -23,6 +24,7 @@ export const resolvers = {
     ]),
     ...makeLinkResolvers([
       'items',
+      'team_members',
     ]),
   },
 };
