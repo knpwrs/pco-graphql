@@ -7,10 +7,6 @@ const rootTypeDefs = [`
   type Query {
     me: Person
   }
-
-  schema {
-    query: Query
-  }
 `];
 
 const rootResolvers = {
