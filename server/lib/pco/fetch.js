@@ -1,4 +1,4 @@
-import { curry, uncurryN } from 'ramda';
+import { curryN, uncurryN, mergeDeepLeft } from 'ramda';
 import throttle from 'p-throttle';
 import delay from 'delay';
 import mem from 'mem';
@@ -30,19 +30,20 @@ export class NotFoundError extends Error {
  *
  * @param {string} accessToken The PCO access token to use for authorization.
  * @param {string} url The resource to fetch.
+ * @param {object} ops Optional additional options (see official Fetch API documentation).
  * @returns {Promise} A promise which resolves with the requested resource.
  */
-const bareFetch = curry(async (accessToken, url) => {
+const bareFetch = curryN(2, async (accessToken, url, ops = {}) => {
   let res = { ok: false };
   // Iterations of this loop are not independent of each other
   /* eslint-disable no-await-in-loop */
   while (!res.ok) {
     d(`GETting ${url}`);
-    res = await fetch(url, {
+    res = await fetch(url, mergeDeepLeft({
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    });
+    }, ops));
     if (res.status === 401) {
       const err = new UnauthorizedError();
       d(err);

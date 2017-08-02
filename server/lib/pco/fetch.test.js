@@ -67,3 +67,17 @@ test.serial('should retry when throttled', async (t) => {
   t.true(end - start >= 2000);
   t.deepEqual(json, profile);
 });
+
+test.serial('should allow additional options', async (t) => {
+  api.post(profileEndpoint).reply(200, function profileHandler() {
+    t.deepEqual(this.req.headers.authorization, ['Bearer 1337']);
+    t.deepEqual(this.req.headers['x-special'], ['FooBanana']);
+    return { success: true };
+  });
+  await fetch('1337', profileUrl, {
+    method: 'POST',
+    headers: {
+      'X-Special': 'FooBanana',
+    },
+  });
+});
