@@ -1,4 +1,4 @@
-import { curryN, uncurryN, mergeDeepLeft } from 'ramda';
+import { curry, curryN, uncurryN, mergeDeepLeft } from 'ramda';
 import throttle from 'p-throttle';
 import delay from 'delay';
 import mem from 'mem';
@@ -116,3 +116,23 @@ const memoizedFetchFactory = mem(fetchFactory, { maxAge: INTERVAL });
  * @returns {Promise} A promise which resolves with the requested resource.
  */
 export default uncurryN(2, memoizedFetchFactory);
+
+/**
+ * A customized version of the above memeoizedFetchFactory which accepts a
+ * third parameter of JSON to post.
+ *
+ * @param {string} accessToken The PCO access token to use for authorization.
+ * @param {string} url The resource to POST to.
+ * @param {object} data The data to post to the given URL.
+ */
+export const memoizedPostFactory = curry(
+  (accessToken, url, data) => memoizedFetchFactory(accessToken)(url, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      data,
+    }),
+  }),
+);

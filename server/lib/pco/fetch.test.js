@@ -1,6 +1,6 @@
 import test from 'ava';
 import nock from 'nock';
-import fetch, { UnauthorizedError, NotFoundError } from './fetch';
+import fetch, { UnauthorizedError, NotFoundError, memoizedPostFactory } from './fetch';
 import { API_BASE } from './api';
 
 const profileEndpoint = '/people/v2/me';
@@ -79,5 +79,22 @@ test.serial('should allow additional options', async (t) => {
     headers: {
       'X-Special': 'FooBanana',
     },
+  });
+});
+
+test.serial('should have pre-configured post factory', async (t) => {
+  api.post(profileEndpoint, {
+    data: {
+      first_name: 'Foo',
+      last_name: 'Bar',
+    },
+  }).reply(200, function profileHandler() {
+    t.deepEqual(this.req.headers.authorization, ['Bearer 1337']);
+    t.deepEqual(this.req.body);
+    return { success: true };
+  });
+  await memoizedPostFactory('1337', profileUrl, {
+    first_name: 'Foo',
+    last_name: 'Bar',
   });
 });

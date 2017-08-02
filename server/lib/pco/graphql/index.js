@@ -2,7 +2,7 @@ import promiseRouter from 'express-promise-router';
 import { graphqlExpress } from 'apollo-server-express';
 import schema from './schema';
 import makeLoader from '../loader';
-import fetchFactory from '../fetch';
+import { memoizedPostFactory } from '../fetch';
 import { pcoAuthenticated } from '../auth';
 
 const app = promiseRouter();
@@ -14,13 +14,13 @@ app.use(graphqlExpress((req) => {
   const { accessToken } = req.session.pco;
   // Make a new loader for every request
   const loader = makeLoader(accessToken);
-  // Also pass along a fetch function
-  const fetch = fetchFactory(accessToken);
+  // Also pass along a post function
+  const post = memoizedPostFactory(accessToken);
   return {
     schema,
     context: {
       loader,
-      fetch,
+      post,
     },
   };
 }));

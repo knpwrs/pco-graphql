@@ -114,20 +114,12 @@ export const resolvers = {
     },
   },
   Mutation: {
-    addPerson: async (root, { attributes }, { fetch }) => {
+    addPerson: async (root, { attributes }, { post }) => {
       d('Adding a person.');
       d(attributes);
-      const { data } = await fetch(getTypeUrl('people', 'people'), {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          data: {
-            type: 'Person',
-            attributes,
-          },
-        }),
+      const { data } = await post(getTypeUrl('people', 'people'), {
+        type: 'Person',
+        attributes,
       });
       d('Person added.');
       d(data);
