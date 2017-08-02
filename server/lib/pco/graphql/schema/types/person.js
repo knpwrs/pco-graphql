@@ -71,6 +71,7 @@ export const typeDefs = [`
 
   extend type Mutation {
     addPerson(attributes: PersonAttributes): Person
+    updatePerson(id: ID!, attributes: PersonAttributes): Person
   }
 `];
 
@@ -118,6 +119,17 @@ export const resolvers = {
       d('Adding a person.');
       d(attributes);
       const { data } = await post(getTypeUrl('people', 'people'), {
+        type: 'Person',
+        attributes,
+      });
+      d('Person added.');
+      d(data);
+      return data;
+    },
+    updatePerson: async (root, { id, attributes }, { patch }) => {
+      d(`Updating a person ${id}.`);
+      d(attributes);
+      const { data } = await patch(getResourceUrl('people', 'people', id), {
         type: 'Person',
         attributes,
       });
