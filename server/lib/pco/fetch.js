@@ -118,21 +118,24 @@ const memoizedFetchFactory = mem(fetchFactory, { maxAge: INTERVAL });
 export default uncurryN(2, memoizedFetchFactory);
 
 /**
- * A customized version of the above memeoizedFetchFactory which accepts a
- * third parameter of JSON to post.
+ * A customized version of the above memeoizedFetchFactory with additional
+ * parameters for HTTP method and data to send.
  *
  * @param {string} accessToken The PCO access token to use for authorization.
  * @param {string} url The resource to POST to.
  * @param {object} data The data to post to the given URL.
  */
-export const memoizedPostFactory = curry(
-  (accessToken, url, data) => memoizedFetchFactory(accessToken)(url, {
+export const memoizedSendJsonFactory = curry(
+  (method, accessToken, url, data) => memoizedFetchFactory(accessToken)(url, {
     headers: {
       'Content-Type': 'application/json',
     },
-    method: 'POST',
+    method,
     body: JSON.stringify({
       data,
     }),
   }),
 );
+
+export const memoizedPostFactory = memoizedSendJsonFactory('POST');
+export const memoizedPatchFactory = memoizedSendJsonFactory('PATCH');

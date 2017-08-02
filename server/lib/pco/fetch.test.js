@@ -1,6 +1,6 @@
 import test from 'ava';
 import nock from 'nock';
-import fetch, { UnauthorizedError, NotFoundError, memoizedPostFactory } from './fetch';
+import fetch, { UnauthorizedError, NotFoundError, memoizedPostFactory, memoizedPatchFactory } from './fetch';
 import { API_BASE } from './api';
 
 const profileEndpoint = '/people/v2/me';
@@ -94,6 +94,23 @@ test.serial('should have pre-configured post factory', async (t) => {
     return { success: true };
   });
   await memoizedPostFactory('1337', profileUrl, {
+    first_name: 'Foo',
+    last_name: 'Bar',
+  });
+});
+
+test.serial('should have pre-configured patch factory', async (t) => {
+  api.patch(profileEndpoint, {
+    data: {
+      first_name: 'Foo',
+      last_name: 'Bar',
+    },
+  }).reply(200, function profileHandler() {
+    t.deepEqual(this.req.headers.authorization, ['Bearer 1337']);
+    t.deepEqual(this.req.body);
+    return { success: true };
+  });
+  await memoizedPatchFactory('1337', profileUrl, {
     first_name: 'Foo',
     last_name: 'Bar',
   });
