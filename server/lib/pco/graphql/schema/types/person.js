@@ -1,5 +1,8 @@
+import debug from 'debug';
 import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
-import { getResourceUrl, getQueryUrl } from '../../../api';
+import { getResourceUrl, getQueryUrl, getTypeUrl } from '../../../api';
+
+const d = debug('app:graphql:person');
 
 export const typeDefs = [`
   # A person added to PCO Services.
@@ -33,8 +36,8 @@ export const typeDefs = [`
     phone_numbers: [PhoneNumber]
   }
 
-  # Search parameters to find people.
-  input PersonWhereParams {
+  # Input attributes for finding, creating, and updating people.
+  input PersonAttributes {
     given_name: String
     first_name: String
     nickname: String
@@ -63,7 +66,11 @@ export const typeDefs = [`
     # Find an invidiual person by ID.
     person(id: ID!): Person
     # Find people matching given parameters.
-    people(where: PersonWhereParams, order: String): [Person]
+    people(where: PersonAttributes, order: String): [Person]
+  }
+
+  extend type Mutation {
+    addPerson(attributes: PersonAttributes): Person
   }
 `];
 
@@ -104,6 +111,27 @@ export const resolvers = {
     },
     people(root, args, { loader }) {
       return loader.load(getQueryUrl('people', 'people', args));
+    },
+  },
+  Mutation: {
+    addPerson: async (root, { attributes }, { fetch }) => {
+      d('Adding a person.');
+      d(attributes);
+      const { data } = await fetch(getTypeUrl('people', 'people'), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          data: {
+            type: 'Person',
+            attributes,
+          },
+        }),
+      });
+      d('Person added.');
+      d(data);
+      return data;
     },
   },
 };

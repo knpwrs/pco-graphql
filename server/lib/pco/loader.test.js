@@ -21,7 +21,7 @@ test('should perform basic fetch operations', async (t) => {
       t.deepEqual(this.req.headers.authorization, ['Bearer 1337']);
       return profileResponse;
     });
-  const loader = makeLoader({ accessToken: '1337' });
+  const loader = makeLoader('1337');
   const [res1, res2] = [loader.load(profileUrl), loader.load(profileUrl)];
   t.is(res1, res2, 'Loading the same url should return the same promise.');
   const data = await res1;
