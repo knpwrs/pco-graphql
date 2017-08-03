@@ -22,12 +22,14 @@ app.use(bodyParser.json());
 
 app.use(session);
 app.use(csrfProtection);
+app.use((req, res, next) => {
+  res.cookie('csrf-token', req.csrfToken());
+  next();
+});
 
 app.use('/auth', authApp);
 app.use('/graphql', graphql);
 app.use('/debug', debugApp);
-
-app.get('/', (req, res) => res.end('Hello!'));
 
 app.listen(PORT, () => {
   d(`Listening on port ${PORT}`);

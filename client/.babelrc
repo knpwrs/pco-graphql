@@ -9,6 +9,7 @@
     }]
   ],
   "plugins": [
+    "graphql-tag",
     "syntax-dynamic-import"
   ],
 }
