@@ -1,7 +1,6 @@
 {
-  "name": "pco-graphql",
+  "name": "pco-graphql-server",
   "private": true,
-  "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=lcov --reporter=text --reporter=html ava",
     "test:watch": "ava --watch",
