@@ -3,13 +3,15 @@ import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo';
+import { ApolloClient, ApolloProvider, createBatchingNetworkInterface } from 'react-apollo';
 import document from 'global/document';
 import cookies from 'js-cookie';
 import Root from './root';
 
-const networkInterface = createNetworkInterface({
+const networkInterface = createBatchingNetworkInterface({
   uri: '/graphql',
+  batchInterval: 10,
+  batchMax: 10,
   opts: {
     credentials: 'same-origin',
     headers: {
@@ -19,6 +21,7 @@ const networkInterface = createNetworkInterface({
 });
 
 const client = new ApolloClient({
+  queryDeduplication: true,
   networkInterface,
 });
 
