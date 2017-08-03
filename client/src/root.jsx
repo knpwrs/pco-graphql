@@ -1,21 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import g from 'glamorous';
+import { Div } from 'glamorous';
 import { gql, graphql } from 'react-apollo';
+import { branch, renderComponent, compose } from 'recompose';
 
-const currentUser = gql`
-  query CurrentUser {
-    me {
-      first_name
-      last_name
-    }
-  }
-`;
-
-const Profile = ({ data }) => {
-  if (data.loading) return <g.H2 color="red">Loading...</g.H2>;
-  return <h2>{data.me.last_name}, {data.me.first_name}</h2>;
-};
+const Profile = ({ data }) => (
+  <h2>{data.me.last_name}, {data.me.first_name}</h2>
+);
 
 Profile.propTypes = {
   data: PropTypes.shape({
@@ -27,10 +18,25 @@ Profile.propTypes = {
   }).isRequired,
 };
 
-const ProfileWithData = graphql(currentUser)(Profile);
+const currentUser = gql`
+  query CurrentUser {
+    me {
+      first_name
+      last_name
+    }
+  }
+`;
 
-export default () => (
-  <div>
-    <ProfileWithData />
-  </div>
+const placeholder = branch(
+  ({ data }) => data.loading,
+  renderComponent(() => (
+    <Div backgroundColor="#F3F3F3" textAlign="center" width="250px" height="50px" />
+  )),
 );
+
+const withData = graphql(currentUser);
+
+export default compose(
+  withData,
+  placeholder,
+)(Profile);
