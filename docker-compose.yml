@@ -9,7 +9,7 @@ services:
       - ./server:/home/node/app
       - /home/node/app/node_modules
     ports:
-      - "${PORT}:8000"
+      # - "${PORT}:8000"
       - "9229:9229" # Debug port
     environment:
       DEBUG: ${DEBUG}
@@ -17,3 +17,14 @@ services:
       CALLBACK_URL: ${CALLBACK_URL}
       OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
       OAUTH_SECRET: ${OAUTH_SECRET}
+  client:
+    build: ./client
+    command: npm run dev
+    volumes:
+      - ./client:/home/node/app
+      - /home/node/app/node_modules
+    ports:
+      - "${PORT}:8000"
+    environment:
+      DEBUG: ${DEBUG}
+      NODE_ENV: development

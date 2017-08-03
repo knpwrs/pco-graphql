@@ -1,0 +1,14 @@
+{
+  "presets": [
+    "react",
+    ["env", {
+      "targets": {
+        "browsers": ["Chrome 58"]
+      },
+      "modules": false
+    }]
+  ],
+  "plugins": [
+    "syntax-dynamic-import"
+  ],
+}
