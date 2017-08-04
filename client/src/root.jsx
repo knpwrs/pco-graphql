@@ -1,51 +1,51 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import g, { Div, Header, Nav } from 'glamorous';
 import ProfileCard from './containers/profile-card';
 
-const Home = () => <div><h2>Home</h2></div>;
-const About = () => <div><h2>About</h2></div>;
-const Topic = ({ match }) => (
+const Plans = () => <div><h2>Plans</h2></div>;
+const People = () => <div><h2>People</h2></div>;
+const Song = ({ match }) => (
   <div>
-    <h3>{match.params.topicId}</h3>
+    <h3>Song: {match.params.songId}</h3>
   </div>
 );
 
-Topic.propTypes = {
+Song.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      topicId: PropTypes.string.isRequired,
+      songId: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
 };
 
-const Topics = ({ match }) => (
+const Songs = ({ match }) => (
   <div>
-    <h2>Topics</h2>
+    <h2>Songs</h2>
     <ul>
       <li>
-        <Link to={`${match.url}/rendering`}>Renering with React</Link>
+        <Link to={`${match.url}/1`}>Fierce</Link>
       </li>
       <li>
-        <Link to={`${match.url}/components`}>Components</Link>
+        <Link to={`${match.url}/2`}>Brighter</Link>
       </li>
       <li>
-        <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
+        <Link to={`${match.url}/3`}>Here As In Heaven</Link>
       </li>
     </ul>
-    <Route path={`${match.url}/:topicId`} component={Topic} />
+    <Route path={`${match.url}/:songId`} component={Song} />
     <Route
       exact
       path={`${match.url}`}
       render={() => (
-        <h3>Please select a topic.</h3>
+        <h3>Please select a song.</h3>
       )}
     />
   </div>
 );
 
-Topics.propTypes = {
+Songs.propTypes = {
   match: PropTypes.shape({
     url: PropTypes.string.isRequired,
   }).isRequired,
@@ -62,15 +62,18 @@ const Root = () => (
     <Div width="100vw" height="100vh" overflowY="auto">
       <Header display="flex">
         <Nav display="flex">
-          <NavBlock><Link to="/">Home</Link></NavBlock>
-          <NavBlock><Link to="/about">About</Link></NavBlock>
-          <NavBlock><Link to="/topics">Topics</Link></NavBlock>
+          <NavBlock><Link to="/">Plans</Link></NavBlock>
+          <NavBlock><Link to="/people">People</Link></NavBlock>
+          <NavBlock><Link to="/songs">Songs</Link></NavBlock>
         </Nav>
         <ProfileCard css={{ marginLeft: 'auto' }} />
       </Header>
-      <Route exact path="/" component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/topics" component={Topics} />
+      <Switch>
+        <Route path="/plans" component={Plans} />
+        <Route path="/people" component={People} />
+        <Route path="/songs" component={Songs} />
+        <Redirect to="/plans" />
+      </Switch>
     </Div>
   </Router>
 );
