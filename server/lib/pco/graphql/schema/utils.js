@@ -5,6 +5,7 @@ import {
   map,
   path,
   mergeDeepRight,
+  clone,
 } from 'ramda';
 import qs from 'qs';
 import { getResourceUrl } from '../../api';
@@ -41,3 +42,12 @@ export const makeAttributeResolvers = compose(
 );
 
 export const mergeAllDeep = reduce(mergeDeepRight, {});
+
+export const adjustApiArgs = (args) => {
+  const apiArgs = clone(args);
+  if (apiArgs.desc) {
+    apiArgs.order = `-${apiArgs.order}`;
+  }
+  delete apiArgs.desc;
+  return apiArgs;
+};

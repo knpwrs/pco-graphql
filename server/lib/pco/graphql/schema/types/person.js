@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
+import { makeLinkResolvers, makeAttributeResolvers, adjustApiArgs } from '../utils';
 import { getResourceUrl, getQueryUrl, getTypeUrl } from '../../../api';
 
 const d = debug('app:graphql:person');
@@ -62,11 +62,18 @@ export const typeDefs = [`
     id: ID
   }
 
+  enum PersonOrderBy {
+    given_name, first_name, nickname, goes_by_name, middle_name, last_name,
+    birthdate, anniversary, gender, grade, child, status, school_type,
+    graduation_year, site_administrator people_permissions, membership,
+    remote_id, medical_notes, created_at, updated_at
+  }
+
   extend type Query {
     # Find an invidiual person by ID.
     person(id: ID!): Person
     # Find people matching given parameters.
-    people(where: PersonAttributes, order: String): [Person]
+    people(where: PersonAttributes, order: PersonOrderBy, desc: Boolean): [Person]
   }
 
   extend type Mutation {
@@ -111,7 +118,8 @@ export const resolvers = {
       return loader.load(getResourceUrl('people', 'people', id));
     },
     people(root, args, { loader }) {
-      return loader.load(getQueryUrl('people', 'people', args));
+      const apiArgs = adjustApiArgs(args);
+      return loader.load(getQueryUrl('people', 'people', apiArgs));
     },
   },
   Mutation: {

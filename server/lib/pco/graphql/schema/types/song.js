@@ -1,6 +1,7 @@
 import {
   makeAttributeResolvers,
   makeLinkResolvers,
+  adjustApiArgs,
 } from '../utils';
 import {
   getResourceUrl,
@@ -26,12 +27,21 @@ export const typeDefs = [`
   }
 
   input SongQueryArgs {
+    author: String
+    hidden: Boolean
+    themes: String
     title: String
+  }
+
+  enum SongOrderBy {
+    title
+    created_at
+    updated_at
   }
 
   extend type Query {
     song(id: ID!): Song
-    songs(where: SongQueryArgs, order: String, offset: Int, per_page: Int): [Song]
+    songs(where: SongQueryArgs, order: SongOrderBy, desc: Boolean, offset: Int, per_page: Int): [Song]
   }
 `];
 
@@ -41,7 +51,8 @@ export const resolvers = {
       return loader.load(getResourceUrl('services', 'songs', id));
     },
     songs(root, args, { loader }) {
-      return loader.load(getQueryUrl('services', 'songs', args));
+      const apiArgs = adjustApiArgs(args);
+      return loader.load(getQueryUrl('services', 'songs', apiArgs));
     },
   },
   Song: {
