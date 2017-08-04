@@ -1,42 +1,78 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Div } from 'glamorous';
-import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent, compose } from 'recompose';
+import g, { Div, Header, Nav } from 'glamorous';
+import ProfileCard from './containers/profile-card';
 
-const Profile = ({ data }) => (
-  <h2>{data.me.last_name}, {data.me.first_name}</h2>
+const Home = () => <div><h2>Home</h2></div>;
+const About = () => <div><h2>About</h2></div>;
+const Topic = ({ match }) => (
+  <div>
+    <h3>{match.params.topicId}</h3>
+  </div>
 );
 
-Profile.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    me: PropTypes.shape({
-      first_name: PropTypes.string,
-      last_name: PropTypes.string,
-    }),
+Topic.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      topicId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 
-const currentUser = gql`
-  query CurrentUser {
-    me {
-      first_name
-      last_name
-    }
-  }
-`;
-
-const placeholder = branch(
-  ({ data }) => data.loading,
-  renderComponent(() => (
-    <Div backgroundColor="#F3F3F3" textAlign="center" width="250px" height="50px" />
-  )),
+const Topics = ({ match }) => (
+  <div>
+    <h2>Topics</h2>
+    <ul>
+      <li>
+        <Link to={`${match.url}/rendering`}>Renering with React</Link>
+      </li>
+      <li>
+        <Link to={`${match.url}/components`}>Components</Link>
+      </li>
+      <li>
+        <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
+      </li>
+    </ul>
+    <Route path={`${match.url}/:topicId`} component={Topic} />
+    <Route
+      exact
+      path={`${match.url}`}
+      render={() => (
+        <h3>Please select a topic.</h3>
+      )}
+    />
+  </div>
 );
 
-const withData = graphql(currentUser);
+Topics.propTypes = {
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
-export default compose(
-  withData,
-  placeholder,
-)(Profile);
+const NavBlock = g.div({
+  width: '150px',
+  height: '75px',
+  lineHeight: '75px',
+});
+
+const Root = () => (
+  <Router>
+    <Div width="100vw" height="100vh" overflowY="auto">
+      <Header display="flex">
+        <Nav display="flex">
+          <NavBlock><Link to="/">Home</Link></NavBlock>
+          <NavBlock><Link to="/about">About</Link></NavBlock>
+          <NavBlock><Link to="/topics">Topics</Link></NavBlock>
+        </Nav>
+        <ProfileCard css={{ marginLeft: 'auto' }} />
+      </Header>
+      <Route exact path="/" component={Home} />
+      <Route path="/about" component={About} />
+      <Route path="/topics" component={Topics} />
+    </Div>
+  </Router>
+);
+
+export default Root;
