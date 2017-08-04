@@ -2,6 +2,10 @@ import {
   makeAttributeResolvers,
   makeLinkResolvers,
 } from '../utils';
+import {
+  getResourceUrl,
+  getQueryUrl,
+} from '../../../api';
 
 export const typeDefs = [`
   # A song
@@ -20,9 +24,26 @@ export const typeDefs = [`
 
     attachments: [Attachment]
   }
+
+  input SongQueryArgs {
+    title: String
+  }
+
+  extend type Query {
+    song(id: ID!): Song
+    songs(where: SongQueryArgs, order: String, offset: Int, per_page: Int): [Song]
+  }
 `];
 
 export const resolvers = {
+  Query: {
+    song(root, { id }, { loader }) {
+      return loader.load(getResourceUrl('services', 'songs', id));
+    },
+    songs(root, args, { loader }) {
+      return loader.load(getQueryUrl('services', 'songs', args));
+    },
+  },
   Song: {
     ...makeAttributeResolvers([
       'admin',
