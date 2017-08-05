@@ -12,12 +12,22 @@ import { getResourceUrl } from '../../api';
 
 const reduceMerge = reduce(merge, {});
 
+export const adjustApiArgs = (args) => {
+  const apiArgs = clone(args);
+  if (apiArgs.desc) {
+    apiArgs.order = `-${apiArgs.order}`;
+  }
+  delete apiArgs.desc;
+  return apiArgs;
+};
+
 export const makeLinkResolvers = compose(
   reduceMerge,
   map(key => ({
     [key]: async (root, args, { loader }) => {
       const link = root.links[key] || `${root.links.self}/${key}`;
-      const query = qs.stringify(args);
+      const apiArgs = adjustApiArgs(args);
+      const query = qs.stringify(apiArgs);
       return loader.load(`${link}${query ? `?${query}` : ''}`);
     },
   })),
@@ -42,12 +52,3 @@ export const makeAttributeResolvers = compose(
 );
 
 export const mergeAllDeep = reduce(mergeDeepRight, {});
-
-export const adjustApiArgs = (args) => {
-  const apiArgs = clone(args);
-  if (apiArgs.desc) {
-    apiArgs.order = `-${apiArgs.order}`;
-  }
-  delete apiArgs.desc;
-  return apiArgs;
-};

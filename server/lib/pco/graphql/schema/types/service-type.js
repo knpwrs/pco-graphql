@@ -13,7 +13,7 @@ export const typeDefs = [`
     sequence: Int!
     updated_at: String!
 
-    plans(order: String, filter: String): [Plan]
+    plans(order: PlanOrderBy, filter: PlanFilter, desc: Boolean, per_page: Int, offset: Int): [Plan]
   }
 
   extend type Query {
@@ -21,6 +21,19 @@ export const typeDefs = [`
     serviceType(id: ID!): ServiceType
     # Find service types with a name that includes a given string.
     serviceTypes(nameLike: String): [ServiceType]
+  }
+
+  enum PlanFilter {
+    future
+    past
+    no_dates
+  }
+
+  enum PlanOrderBy {
+    title
+    created_at
+    updated_at
+    sort_date
   }
 `];
 
