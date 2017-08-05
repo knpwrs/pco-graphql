@@ -1,11 +1,18 @@
 import React from 'react';
+import { compose } from 'recompose';
+import { withRouter } from 'react-router-dom';
 import g, { Nav } from 'glamorous';
 import ProfileCard from './profile-card';
 import styledLink from '../components/styled-link';
 
 const headerHeight = '50px';
 
-const NavLink = styledLink({
+const isActive = ({ to, location: { pathname } }) => pathname.startsWith(to);
+
+const NavLink = compose(
+  withRouter,
+  styledLink,
+)({
   width: '150px',
   height: headerHeight,
   lineHeight: headerHeight,
@@ -21,6 +28,7 @@ const NavLink = styledLink({
 }, (props, theme) => ({
   ...theme.headerText,
   borderColor: theme.borderColor,
+  backgroundColor: isActive(props) ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0)',
 }));
 
 const HeaderWrapper = g.header({
@@ -38,7 +46,7 @@ const HeaderWrapper = g.header({
 const AppHeader = () => (
   <HeaderWrapper>
     <Nav display="flex">
-      <NavLink to="/">Plans</NavLink>
+      <NavLink to="/plans">Plans</NavLink>
       <NavLink to="/people">People</NavLink>
       <NavLink to="/songs">Songs</NavLink>
     </Nav>
