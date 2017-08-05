@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-ro
 import PropTypes from 'prop-types';
 import { css } from 'glamor';
 import { Div } from 'glamorous';
-import ThemeByRouteProvider from './containers/theme-by-route-provider';
+import ThemeByRouteProvider from './components/theme-by-route-provider';
 import AppHeader from './containers/app-header';
 
 css.global('body', {
