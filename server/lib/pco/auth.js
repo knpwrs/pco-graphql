@@ -79,7 +79,9 @@ export const pcoAuthenticated = async (req, res, next) => {
     next();
   } else {
     d('No active PCO session.');
-    next(new Error('Not authenticated with PCO!'));
+    res.status(401).json({
+      error: 'Not authenticated with PCO!',
+    });
   }
 };
 
