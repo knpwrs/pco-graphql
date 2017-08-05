@@ -1,3 +1,4 @@
+import { pathOr } from 'ramda';
 import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
 import { getResourceUrl } from '../../../api';
 
@@ -10,9 +11,12 @@ export const typeDefs = [`
     dates: String!
     title: String
 
+    next_plan: Plan
     items: [Item]
     # People scheduled for this plan.
     team_members: [PlanPerson]
+
+    next_plan_id: String
   }
 
   extend type Query {
@@ -36,6 +40,9 @@ export const resolvers = {
     ...makeLinkResolvers([
       'items',
       'team_members',
+      'next_plan',
     ]),
+    // Resolves to `null` if there is no next plan
+    next_plan_id: pathOr(null, ['relationships', 'next_plan', 'data', 'id']),
   },
 };
