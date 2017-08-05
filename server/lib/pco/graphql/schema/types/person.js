@@ -74,6 +74,8 @@ export const typeDefs = [`
     person(id: ID!): Person
     # Find people matching given parameters.
     people(where: PersonAttributes, order: PersonOrderBy, desc: Boolean, offset: Int, per_page: Int): [Person]
+    # Get the total number of people
+    totalPeople: Int
   }
 
   extend type Mutation {
@@ -119,6 +121,10 @@ export const resolvers = {
     },
     people(root, args, { loader }) {
       return loader.load(getQueryUrl('people', 'people', args));
+    },
+    totalPeople: async (root, args, { rawLoader }) => {
+      const data = await rawLoader.load(getTypeUrl('people', 'people'));
+      return data.meta.total_count;
     },
   },
   Mutation: {

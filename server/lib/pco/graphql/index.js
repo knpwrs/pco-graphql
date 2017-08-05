@@ -12,8 +12,9 @@ app.use(pcoAuthenticated);
 
 app.use(graphqlExpress((req) => {
   const { accessToken } = req.session.pco;
-  // Make a new loader for every request
+  // Make new loaders for every request
   const loader = makeLoader(accessToken);
+  const rawLoader = makeLoader(accessToken, false);
   // Also pass along post/patch functions
   const post = memoizedPostFactory(accessToken);
   const patch = memoizedPatchFactory(accessToken);
@@ -21,6 +22,7 @@ app.use(graphqlExpress((req) => {
     schema,
     context: {
       loader,
+      rawLoader,
       post,
       patch,
     },

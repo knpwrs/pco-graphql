@@ -12,9 +12,12 @@ const d = debug('app:loader');
  * @param {string} pco.accessToken The PCO access token.
  * @returns {DataLoader} A DataLoader object for loading PCO URLs.
  */
-const makeLoader = accessToken => new DataLoader(async ([url]) => {
+const makeLoader = (accessToken, trim = true) => new DataLoader(async ([url]) => {
   d(`Loading ${url}`);
-  const { data } = await fetch(accessToken, url);
+  let data = await fetch(accessToken, url);
+  if (trim) {
+    data = data.data;
+  }
   d(`Resolving ${url}`);
   return [data];
 }, {

@@ -3,6 +3,7 @@ import {
   makeLinkResolvers,
 } from '../utils';
 import {
+  getTypeUrl,
   getResourceUrl,
   getQueryUrl,
 } from '../../../api';
@@ -41,6 +42,7 @@ export const typeDefs = [`
   extend type Query {
     song(id: ID!): Song
     songs(where: SongQueryArgs, order: SongOrderBy, desc: Boolean, offset: Int, per_page: Int): [Song]
+    totalSongs: Int
   }
 `];
 
@@ -51,6 +53,10 @@ export const resolvers = {
     },
     songs(root, args, { loader }) {
       return loader.load(getQueryUrl('services', 'songs', args));
+    },
+    totalSongs: async (root, args, { rawLoader }) => {
+      const data = await rawLoader.load(getTypeUrl('services', 'songs'));
+      return data.meta.total_count;
     },
   },
   Song: {
