@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import g, { Div, Header, Nav } from 'glamorous';
+import { Div, Header, Nav } from 'glamorous';
 import ProfileCard from './containers/profile-card';
+import styledLink from './components/styled-link';
 
 const Plans = () => <div><h2>Plans</h2></div>;
 const People = () => <div><h2>People</h2></div>;
@@ -52,20 +53,31 @@ Songs.propTypes = {
 };
 
 const headerHeight = '50px';
-const NavBlock = g.div({
+
+const NavLink = styledLink({
   width: '150px',
   height: headerHeight,
   lineHeight: headerHeight,
+  textAlign: 'center',
+  fontFamily: 'Lato',
+  border: '1px solid black',
+  borderWidth: '0 1px 0 0',
+  display: 'block',
+  textDecoration: 'none',
+  transition: 'color 250ms',
+  ':hover': {
+    color: 'red',
+  },
 });
 
 const Root = () => (
   <Router>
     <Div width="100vw" height="100vh" overflowY="auto">
-      <Header display="flex" height={headerHeight} justifyContent="space-between">
+      <Header display="flex" height={headerHeight} justifyContent="space-between" borderBottom="1px solid black">
         <Nav display="flex">
-          <NavBlock><Link to="/">Plans</Link></NavBlock>
-          <NavBlock><Link to="/people">People</Link></NavBlock>
-          <NavBlock><Link to="/songs">Songs</Link></NavBlock>
+          <NavLink to="/">Plans</NavLink>
+          <NavLink to="/people">People</NavLink>
+          <NavLink to="/songs">Songs</NavLink>
         </Nav>
         <ProfileCard width="200px" lineHeight={headerHeight} />
       </Header>

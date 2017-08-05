@@ -13,6 +13,7 @@ const config = {
   context,
   entry: [
     'style-loader!css-loader!sanitize.css/sanitize.css',
+    'style-loader!css-loader!lato-font/css/lato-font.css',
     './src/index.jsx',
   ],
   resolve: {
@@ -27,6 +28,9 @@ const config = {
       test: /\.jsx?$/,
       exclude: /node_modules/,
       use: 'babel-loader',
+    }, {
+      test: /\.(ttf|eot|woff|woff2)$/,
+      loader: 'file-loader',
     }],
   },
   plugins: [

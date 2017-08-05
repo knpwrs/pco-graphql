@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Div, H3 } from 'glamorous';
+import { Div, Img } from 'glamorous';
 import { gql, graphql } from 'react-apollo';
 import { branch, renderComponent, compose } from 'recompose';
 
 const ProfileCard = ({ data, ...props }) => (
   <Div {...props} display="flex">
-    <img height="100%" src={data.me.avatar} />
+    <Img height="100%" src={data.me.avatar} border="solid black" borderWidth="0 1px" />
     <Div textAlign="center" flexGrow="1">{data.me.first_name} {data.me.last_name}</Div>
   </Div>
 );
