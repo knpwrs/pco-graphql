@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose } from 'recompose';
+import { compose, setDisplayName } from 'recompose';
 import { withRouter } from 'react-router-dom';
 import g, { Nav } from 'glamorous';
 import ProfileCard from './profile-card';
@@ -11,6 +11,7 @@ const isActive = ({ to, location: { pathname } }) => pathname.startsWith(to);
 
 const NavLink = compose(
   withRouter,
+  setDisplayName('NavLink'),
   styledLink,
 )({
   width: '150px',
