@@ -1,10 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Div, Header, Nav } from 'glamorous';
+import { css } from 'glamor';
+import { Div } from 'glamorous';
 import ThemeByRouteProvider from './containers/theme-by-route-provider';
-import ProfileCard from './containers/profile-card';
-import styledLink from './components/styled-link';
+import AppHeader from './containers/app-header';
+
+css.global('body', {
+  backgroundColor: '#FCFCFC',
+});
 
 const Plans = () => <div><h2>Plans</h2></div>;
 const People = () => <div><h2>People</h2></div>;
@@ -53,38 +57,11 @@ Songs.propTypes = {
   }).isRequired,
 };
 
-const headerHeight = '50px';
-
-const NavLink = styledLink({
-  width: '150px',
-  height: headerHeight,
-  lineHeight: headerHeight,
-  textAlign: 'center',
-  fontFamily: 'Lato',
-  border: '1px solid black',
-  borderWidth: '0 1px 0 0',
-  display: 'block',
-  textDecoration: 'none',
-  transition: 'color 250ms',
-  ':hover': {
-    color: 'red',
-  },
-}, (props, theme) => ({
-  color: theme.primaryColor,
-}));
-
 const Root = () => (
   <Router>
     <ThemeByRouteProvider>
       <Div width="100vw" height="100vh" overflowY="auto">
-        <Header display="flex" height={headerHeight} justifyContent="space-between" borderBottom="1px solid black">
-          <Nav display="flex">
-            <NavLink to="/">Plans</NavLink>
-            <NavLink to="/people">People</NavLink>
-            <NavLink to="/songs">Songs</NavLink>
-          </Nav>
-          <ProfileCard width="200px" lineHeight={headerHeight} />
-        </Header>
+        <AppHeader />
         <Switch>
           <Route path="/plans" component={Plans} />
           <Route path="/people" component={People} />

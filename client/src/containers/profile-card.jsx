@@ -1,13 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Div, Img } from 'glamorous';
+import g, { Div } from 'glamorous';
 import { gql, graphql } from 'react-apollo';
 import { branch, renderComponent, compose } from 'recompose';
 
+const ProfileCardText = g.div({
+  flexGrow: 1,
+}, (props, theme) => ({
+  ...theme.headerText,
+}));
+
+const ProfileCardImage = g.img({
+  height: '100%',
+  borderStyle: 'solid',
+  borderWidth: '0 1px',
+}, (props, theme) => ({
+  borderColor: theme.borderColor,
+}));
+
 const ProfileCard = ({ data, ...props }) => (
   <Div {...props} display="flex">
-    <Img height="100%" src={data.me.avatar} border="solid black" borderWidth="0 1px" />
-    <Div textAlign="center" flexGrow="1">{data.me.first_name} {data.me.last_name}</Div>
+    <ProfileCardImage src={data.me.avatar} />
+    <ProfileCardText>{data.me.first_name} {data.me.last_name}</ProfileCardText>
   </Div>
 );
 

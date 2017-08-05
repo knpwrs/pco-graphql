@@ -4,15 +4,37 @@ import { ThemeProvider } from 'glamorous';
 import { withRouter } from 'react-router-dom';
 import { compose, split, filter, identity, head, prop, propOr, __ } from 'ramda';
 
+const colors = {
+  darkGray: '#282B30',
+  green: '#8DBE5D',
+  blue: '#6C99C4',
+  orange: '#E8A04B',
+};
+
+const baseTheme = {
+  borderColor: colors.darkGray,
+  headerText: {
+    textAlign: 'center',
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    letterSpacing: '0.1em',
+    fontSize: '0.9em',
+    color: '#FFF',
+  },
+};
+
 const themes = {
   plans: {
-    primaryColor: 'green',
+    ...baseTheme,
+    primaryColor: colors.green,
   },
   people: {
-    primaryColor: 'blue',
+    ...baseTheme,
+    primaryColor: colors.blue,
   },
   songs: {
-    primaryColor: 'orange',
+    ...baseTheme,
+    primaryColor: colors.orange,
   },
 };
 
