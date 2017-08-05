@@ -10,6 +10,7 @@
   ],
   "plugins": [
     "graphql-tag",
+    "ramda",
     "syntax-dynamic-import",
     "transform-object-rest-spread"
   ],

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Div, Header, Nav } from 'glamorous';
+import ThemeByRouteProvider from './containers/theme-by-route-provider';
 import ProfileCard from './containers/profile-card';
 import styledLink from './components/styled-link';
 
@@ -68,26 +69,30 @@ const NavLink = styledLink({
   ':hover': {
     color: 'red',
   },
-});
+}, (props, theme) => ({
+  color: theme.primaryColor,
+}));
 
 const Root = () => (
   <Router>
-    <Div width="100vw" height="100vh" overflowY="auto">
-      <Header display="flex" height={headerHeight} justifyContent="space-between" borderBottom="1px solid black">
-        <Nav display="flex">
-          <NavLink to="/">Plans</NavLink>
-          <NavLink to="/people">People</NavLink>
-          <NavLink to="/songs">Songs</NavLink>
-        </Nav>
-        <ProfileCard width="200px" lineHeight={headerHeight} />
-      </Header>
-      <Switch>
-        <Route path="/plans" component={Plans} />
-        <Route path="/people" component={People} />
-        <Route path="/songs" component={Songs} />
-        <Redirect to="/plans" />
-      </Switch>
-    </Div>
+    <ThemeByRouteProvider>
+      <Div width="100vw" height="100vh" overflowY="auto">
+        <Header display="flex" height={headerHeight} justifyContent="space-between" borderBottom="1px solid black">
+          <Nav display="flex">
+            <NavLink to="/">Plans</NavLink>
+            <NavLink to="/people">People</NavLink>
+            <NavLink to="/songs">Songs</NavLink>
+          </Nav>
+          <ProfileCard width="200px" lineHeight={headerHeight} />
+        </Header>
+        <Switch>
+          <Route path="/plans" component={Plans} />
+          <Route path="/people" component={People} />
+          <Route path="/songs" component={Songs} />
+          <Redirect to="/plans" />
+        </Switch>
+      </Div>
+    </ThemeByRouteProvider>
   </Router>
 );
 
