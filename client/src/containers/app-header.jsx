@@ -28,6 +28,7 @@ const NavLink = compose(
   },
 }, (props, theme) => ({
   ...theme.headerText,
+  fontFamily: theme.fontFamily,
   borderColor: theme.borderColor,
   backgroundColor: isActive(props) ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0)',
 }));

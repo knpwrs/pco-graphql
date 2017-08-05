@@ -13,9 +13,9 @@ const colors = {
 
 const baseTheme = {
   borderColor: colors.darkGray,
+  fontFamily: 'Lato',
   headerText: {
     textAlign: 'center',
-    fontFamily: 'Lato',
     fontWeight: 'bold',
     letterSpacing: '0.1em',
     fontSize: '0.9em',
