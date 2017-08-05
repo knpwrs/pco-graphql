@@ -5,21 +5,11 @@ import {
   map,
   path,
   mergeDeepRight,
-  clone,
 } from 'ramda';
 import qs from 'qs';
-import { getResourceUrl } from '../../api';
+import { getResourceUrl, adjustApiArgs } from '../../api';
 
 const reduceMerge = reduce(merge, {});
-
-export const adjustApiArgs = (args) => {
-  const apiArgs = clone(args);
-  if (apiArgs.desc) {
-    apiArgs.order = `-${apiArgs.order}`;
-  }
-  delete apiArgs.desc;
-  return apiArgs;
-};
 
 export const makeLinkResolvers = compose(
   reduceMerge,

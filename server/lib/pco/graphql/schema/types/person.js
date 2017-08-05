@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { makeLinkResolvers, makeAttributeResolvers, adjustApiArgs } from '../utils';
+import { makeLinkResolvers, makeAttributeResolvers } from '../utils';
 import { getResourceUrl, getQueryUrl, getTypeUrl } from '../../../api';
 
 const d = debug('app:graphql:person');
@@ -118,8 +118,7 @@ export const resolvers = {
       return loader.load(getResourceUrl('people', 'people', id));
     },
     people(root, args, { loader }) {
-      const apiArgs = adjustApiArgs(args);
-      return loader.load(getQueryUrl('people', 'people', apiArgs));
+      return loader.load(getQueryUrl('people', 'people', args));
     },
   },
   Mutation: {

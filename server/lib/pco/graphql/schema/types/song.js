@@ -1,7 +1,6 @@
 import {
   makeAttributeResolvers,
   makeLinkResolvers,
-  adjustApiArgs,
 } from '../utils';
 import {
   getResourceUrl,
@@ -51,8 +50,7 @@ export const resolvers = {
       return loader.load(getResourceUrl('services', 'songs', id));
     },
     songs(root, args, { loader }) {
-      const apiArgs = adjustApiArgs(args);
-      return loader.load(getQueryUrl('services', 'songs', apiArgs));
+      return loader.load(getQueryUrl('services', 'songs', args));
     },
   },
   Song: {
