@@ -53,9 +53,7 @@ const placeholder = branch(
   )),
 );
 
-const withData = graphql(currentUser);
-
 export default compose(
-  withData,
+  graphql(currentUser),
   placeholder,
 )(ProfileCard);
