@@ -39,6 +39,7 @@ export const makeRelationshipResolvers = compose(
     [key]: async (root, args, { loader }) => {
       const { data } = root.relationships[key];
       if (!data) return null;
+      if (!data.id || data.id === '0') return null;
       return loader.load(getResourceUrl(api, resource, data.id));
     },
   })),
