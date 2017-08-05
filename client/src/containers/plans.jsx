@@ -5,7 +5,7 @@ import { branch, renderComponent, compose } from 'recompose';
 import { Div } from 'glamorous';
 
 const plansQuery = gql`
-  query PlansQuery{
+  query PlansQuery {
     serviceTypes {
       id
       name
