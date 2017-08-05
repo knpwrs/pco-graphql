@@ -5,7 +5,10 @@ import { gql, graphql } from 'react-apollo';
 import { branch, renderComponent, compose } from 'recompose';
 
 const ProfileCard = ({ data, ...props }) => (
-  <H3 {...props}>{data.me.last_name}, {data.me.first_name}</H3>
+  <Div {...props} display="flex">
+    <img height="100%" src={data.me.avatar} />
+    <Div textAlign="center" flexGrow="1">{data.me.first_name} {data.me.last_name}</Div>
+  </Div>
 );
 
 ProfileCard.propTypes = {
@@ -14,6 +17,7 @@ ProfileCard.propTypes = {
     me: PropTypes.shape({
       first_name: PropTypes.string,
       last_name: PropTypes.string,
+      avatar: PropTypes.string,
     }),
   }).isRequired,
 };
@@ -23,6 +27,7 @@ const currentUser = gql`
     me {
       first_name
       last_name
+      avatar
     }
   }
 `;

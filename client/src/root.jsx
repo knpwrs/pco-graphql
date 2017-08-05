@@ -51,22 +51,23 @@ Songs.propTypes = {
   }).isRequired,
 };
 
+const headerHeight = '50px';
 const NavBlock = g.div({
   width: '150px',
-  height: '75px',
-  lineHeight: '75px',
+  height: headerHeight,
+  lineHeight: headerHeight,
 });
 
 const Root = () => (
   <Router>
     <Div width="100vw" height="100vh" overflowY="auto">
-      <Header display="flex">
+      <Header display="flex" height={headerHeight} justifyContent="space-between">
         <Nav display="flex">
           <NavBlock><Link to="/">Plans</Link></NavBlock>
           <NavBlock><Link to="/people">People</Link></NavBlock>
           <NavBlock><Link to="/songs">Songs</Link></NavBlock>
         </Nav>
-        <ProfileCard css={{ marginLeft: 'auto' }} />
+        <ProfileCard width="200px" lineHeight={headerHeight} />
       </Header>
       <Switch>
         <Route path="/plans" component={Plans} />
