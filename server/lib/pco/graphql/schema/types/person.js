@@ -73,7 +73,7 @@ export const typeDefs = [`
     # Find an invidiual person by ID.
     person(id: ID!): Person
     # Find people matching given parameters.
-    people(where: PersonAttributes, order: PersonOrderBy, desc: Boolean): [Person]
+    people(where: PersonAttributes, order: PersonOrderBy, desc: Boolean, offset: Int, per_page: Int): [Person]
   }
 
   extend type Mutation {
