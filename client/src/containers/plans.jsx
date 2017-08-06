@@ -44,9 +44,7 @@ const DateCell = g.td({
 
 const TitleCell = g.td({
   fontWeight: 200,
-}, ({ title }) => ({
-  opacity: title ? 1 : 0.2,
-}));
+});
 
 const PlanRow = g.tr((props, { highlightColor }) => ({
   ':hover': {
@@ -54,10 +52,14 @@ const PlanRow = g.tr((props, { highlightColor }) => ({
   },
 }));
 
+const LightText = g.span({
+  opacity: 0.2,
+});
+
 const Plan = ({ plan }) => (
   <PlanRow>
     <DateCell>{plan.dates}</DateCell>
-    <TitleCell title={plan.title}>{plan.title || 'No Title'}</TitleCell>
+    <TitleCell>{plan.title || <LightText>No Title</LightText>}</TitleCell>
   </PlanRow>
 );
 
@@ -85,7 +87,9 @@ PlanRows.propTypes = {
 
 const ServiceType = ({ type }) => (
   <Card title={type.name}>
-    {type.plans.length > 0 ? <PlanRows plans={type.plans} /> : 'No plans found.'}
+    {type.plans.length > 0
+      ? <PlanRows plans={type.plans} />
+      : <LightText>No plans found</LightText>}
   </Card>
 );
 
