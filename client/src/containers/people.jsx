@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { branch, renderComponent, compose } from 'recompose';
-import { Div } from 'glamorous';
+import { pathOr } from 'ramda';
+import g, { Div } from 'glamorous';
 import Page from '../components/page';
+import Card from '../components/card';
 
 const peopleQuery = gql`
   query PeopleQuery {
@@ -12,6 +14,12 @@ const peopleQuery = gql`
       id
       first_name
       last_name
+      phone_numbers {
+        number
+      }
+      emails {
+        address
+      }
     }
   }
 `;
@@ -20,21 +28,62 @@ const personShape = PropTypes.shape({
   id: PropTypes.string,
   first_name: PropTypes.string,
   last_name: PropTypes.string,
+  phone_numbers: PropTypes.arrayOf(PropTypes.shape({
+    number: PropTypes.string,
+  })),
+  emails: PropTypes.arrayOf(PropTypes.shape({
+    address: PropTypes.string,
+  })),
 });
 
-const Person = ({ person }) => (
-  <div>
-    <h3>{person.first_name} {person.last_name}</h3>
-  </div>
+const PhoneNumberSpan = ({ person }) => (
+  <span>{pathOr('No Phone Number', ['phone_numbers', 0, 'number'], person)}</span>
 );
 
-Person.propTypes = {
+PhoneNumberSpan.propTypes = {
+  person: personShape.isRequired,
+};
+
+const EmailAddressSpan = ({ person }) => (
+  <span>{pathOr('No Email Address', ['emails', 0, 'address'], person)}</span>
+);
+
+EmailAddressSpan.propTypes = {
+  person: personShape.isRequired,
+};
+
+const Column = g.div({
+  flex: 1,
+});
+
+const PersonInfo = ({ person }) => (
+  <Div display="flex">
+    <Column>
+      <EmailAddressSpan person={person} />
+    </Column>
+    <Column>
+      <PhoneNumberSpan person={person} />
+    </Column>
+  </Div>
+);
+
+PersonInfo.propTypes = {
+  person: personShape.isRequired,
+};
+
+const PersonCard = ({ person }) => (
+  <Card title={`${person.first_name} ${person.last_name}`}>
+    <PersonInfo person={person} />
+  </Card>
+);
+
+PersonCard.propTypes = {
   person: personShape.isRequired,
 };
 
 const People = ({ data }) => (
   <Page title={`People (${data.totalPeople})`}>
-    {data.people.map(person => <Person key={person.id} person={person} />)}
+    {data.people.map(person => <PersonCard key={person.id} person={person} />)}
   </Page>
 );
 
