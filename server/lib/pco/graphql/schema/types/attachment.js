@@ -18,6 +18,7 @@ export const typeDefs = [`
     updated_at: String
     streamable: Boolean
     url: String
+    thumbnail_url: String
   }
 `];
 
@@ -35,6 +36,7 @@ export const resolvers = {
       'updated_at',
       'streamable',
       'url',
+      'thumbnail_url',
     ]),
   },
 };
