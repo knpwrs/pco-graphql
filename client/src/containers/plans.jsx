@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { branch, renderComponent, compose } from 'recompose';
-import { Div } from 'glamorous';
+import g, { Div, Table } from 'glamorous';
+import PageHeader from '../components/page-header';
+import Card from '../components/card';
 
 const plansQuery = gql`
   query PlansQuery {
@@ -30,21 +32,61 @@ const serviceTypeShape = PropTypes.shape({
   plans: PropTypes.arrayOf(planShape),
 });
 
+const ColHead = g.th({
+  textAlign: 'left',
+  fontWeight: 300,
+});
+
+const DateCell = g.td({
+  width: '25%',
+  fontWeight: 300,
+});
+
+const TitleCell = g.td({
+  fontWeight: 200,
+}, ({ title }) => ({
+  opacity: title ? 1 : 0.2,
+}));
+
+const PlanRow = g.tr((props, { highlightColor }) => ({
+  ':hover': {
+    backgroundColor: highlightColor,
+  },
+}));
+
 const Plan = ({ plan }) => (
-  <div>
-    {plan.dates} - {plan.title}
-  </div>
+  <PlanRow>
+    <DateCell>{plan.dates}</DateCell>
+    <TitleCell title={plan.title}>{plan.title || 'No Title'}</TitleCell>
+  </PlanRow>
 );
 
 Plan.propTypes = {
   plan: planShape.isRequired,
 };
 
+const PlanRows = ({ plans }) => (
+  <Table width="100%">
+    <thead>
+      <tr>
+        <ColHead>Date</ColHead>
+        <ColHead>Title</ColHead>
+      </tr>
+    </thead>
+    <tbody>
+      {plans.map(plan => <Plan key={plan.id} plan={plan} />)}
+    </tbody>
+  </Table>
+);
+
+PlanRows.propTypes = {
+  plans: PropTypes.arrayOf(planShape).isRequired,
+};
+
 const ServiceType = ({ type }) => (
-  <div>
-    <h3>{type.name}</h3>
-    {type.plans.length > 0 ? type.plans.map(plan => <Plan key={plan.id} plan={plan} />) : 'No plans found.'}
-  </div>
+  <Card title={type.name}>
+    {type.plans.length > 0 ? <PlanRows plans={type.plans} /> : 'No plans found.'}
+  </Card>
 );
 
 ServiceType.propTypes = {
@@ -53,7 +95,7 @@ ServiceType.propTypes = {
 
 const Plans = ({ data }) => (
   <div>
-    <h2>Plans</h2>
+    <PageHeader>Plans</PageHeader>
     {data.serviceTypes.map(type => <ServiceType key={type.id} type={type} />)}
   </div>
 );

@@ -8,7 +8,6 @@ const ProfileCardText = g.div({
   flexGrow: 1,
 }, (props, theme) => ({
   ...theme.headerText,
-  fontFamily: theme.fontFamily,
 }));
 
 const ProfileCardImage = g.img({

@@ -6,20 +6,31 @@ import { compose, split, filter, identity, head, prop, propOr, __ } from 'ramda'
 
 const colors = {
   darkGray: '#282B30',
-  green: '#8DBE5D',
-  blue: '#6C99C4',
-  orange: '#E8A04B',
+  lightGray: '#EEE',
+  green: 'rgba(141, 190, 93, 1)',
+  transparentGreen: 'rgba(141, 190, 93, 0.1)',
+  blue: 'rgba(108, 153, 196, 1)',
+  transparentBlue: 'rgba(108, 153, 196, 0.1)',
+  orange: 'rgba(232, 160, 75, 1)',
+  transparentOrange: 'rgba(232, 160, 75, 0.1)',
 };
+
+const fontFamily = 'Lato';
 
 const baseTheme = {
   borderColor: colors.darkGray,
-  fontFamily: 'Lato',
+  lightBorderColor: colors.lightGray,
   headerText: {
+    fontFamily,
     textAlign: 'center',
     fontWeight: 'bold',
     letterSpacing: '0.1em',
     fontSize: '0.9em',
     color: '#FFF',
+  },
+  bodyText: {
+    fontFamily,
+    color: colors.darkGray,
   },
 };
 
@@ -27,14 +38,17 @@ const themes = {
   plans: {
     ...baseTheme,
     primaryColor: colors.green,
+    highlightColor: colors.transparentGreen,
   },
   people: {
     ...baseTheme,
     primaryColor: colors.blue,
+    highlightColor: colors.transparentBlue,
   },
   songs: {
     ...baseTheme,
     primaryColor: colors.orange,
+    highlightColor: colors.transparentOrange,
   },
 };
 
