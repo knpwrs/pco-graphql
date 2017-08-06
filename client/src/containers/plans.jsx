@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { branch, renderComponent, compose } from 'recompose';
 import g, { Div, Table } from 'glamorous';
-import PageHeader from '../components/page-header';
+import Page from '../components/page';
 import Card from '../components/card';
 
 const plansQuery = gql`
@@ -98,10 +98,9 @@ ServiceType.propTypes = {
 };
 
 const Plans = ({ data }) => (
-  <div>
-    <PageHeader>Plans</PageHeader>
+  <Page title="Plans">
     {data.serviceTypes.map(type => <ServiceType key={type.id} type={type} />)}
-  </div>
+  </Page>
 );
 
 Plans.propTypes = {

@@ -4,7 +4,6 @@ import { css } from 'glamor';
 import { Div } from 'glamorous';
 import ThemeByRouteProvider from './components/theme-by-route-provider';
 import AppHeader from './containers/app-header';
-import Page from './components/page';
 import Plans from './containers/plans';
 import People from './containers/people';
 import Songs from './containers/songs';
@@ -18,14 +17,12 @@ const Root = () => (
     <ThemeByRouteProvider>
       <Div width="100vw" height="100vh">
         <AppHeader />
-        <Page>
-          <Switch>
-            <Route path="/plans" component={Plans} />
-            <Route path="/people" component={People} />
-            <Route path="/songs" component={Songs} />
-            <Redirect to="/plans" />
-          </Switch>
-        </Page>
+        <Switch>
+          <Route path="/plans" component={Plans} />
+          <Route path="/people" component={People} />
+          <Route path="/songs" component={Songs} />
+          <Redirect to="/plans" />
+        </Switch>
       </Div>
     </ThemeByRouteProvider>
   </Router>

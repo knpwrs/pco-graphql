@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { branch, renderComponent, compose } from 'recompose';
 import { Div } from 'glamorous';
+import Page from '../components/page';
 
 const peopleQuery = gql`
   query PeopleQuery {
@@ -32,10 +33,9 @@ Person.propTypes = {
 };
 
 const People = ({ data }) => (
-  <div>
-    <h2>People ({data.totalPeople})</h2>
+  <Page title={`People (${data.totalPeople})`}>
     {data.people.map(person => <Person key={person.id} person={person} />)}
-  </div>
+  </Page>
 );
 
 People.propTypes = {
