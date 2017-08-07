@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { branch, renderComponent, withHandlers } from 'recompose';
+import { withHandlers } from 'recompose';
 import g, { Div } from 'glamorous';
 import { find, filter, identity, prop, match, map, compose } from 'ramda';
 import Page from '../components/page';
@@ -12,6 +12,7 @@ import Thumbnail from '../components/thumbnail';
 import PageNavBar from '../components/page-nav-bar';
 import * as playerActions from '../actions/player';
 import withPage from '../util/with-page';
+import { placeholderLoader } from '../components/loader';
 
 const PER_PAGE = 10;
 
@@ -159,13 +160,6 @@ Songs.propTypes = {
   page: PropTypes.number.isRequired,
 };
 
-const placeholder = branch(
-  ({ data }) => data.loading,
-  renderComponent(props => (
-    <Div {...props} backgroundColor="#F3F3F3" textAlign="center" width="100%" height="100%" />
-  )),
-);
-
 export default compose(
   withPage,
   graphql(songsQuery, {
@@ -176,5 +170,5 @@ export default compose(
       },
     }),
   }),
-  placeholder,
+  placeholderLoader({ dark: true }),
 )(Songs);

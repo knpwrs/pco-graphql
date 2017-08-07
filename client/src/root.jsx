@@ -7,26 +7,25 @@ import FullPageDiv from './components/full-page-div';
 import LoginPage from './components/login-page';
 import AppHeader from './containers/app-header';
 import Player from './containers/player';
+import Loader from './components/loader';
 
 css.global('body', {
   backgroundColor: '#FCFCFC',
 });
 
-const loading = () => <h2>Loading</h2>;
-
 const Plans = loadable({
   loader: () => import('./containers/plans'),
-  loading,
+  loading: Loader,
 });
 
 const People = loadable({
   loader: () => import('./containers/people'),
-  loading,
+  loading: Loader,
 });
 
 const Songs = loadable({
   loader: () => import('./containers/songs'),
-  loading,
+  loading: Loader,
 });
 
 const Root = () => (

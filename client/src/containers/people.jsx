@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent } from 'recompose';
 import { pathOr, compose } from 'ramda';
 import g, { Div } from 'glamorous';
 import Page from '../components/page';
 import Card from '../components/card';
 import PageNavBar from '../components/page-nav-bar';
 import withPage from '../util/with-page';
+import { placeholderLoader } from '../components/loader';
 
 const PER_PAGE = 10;
 
@@ -106,13 +106,6 @@ People.propTypes = {
   page: PropTypes.number.isRequired,
 };
 
-const placeholder = branch(
-  ({ data }) => data.loading,
-  renderComponent(props => (
-    <Div {...props} backgroundColor="#F3F3F3" textAlign="center" width="100%" height="100%" />
-  )),
-);
-
 export default compose(
   withPage,
   graphql(peopleQuery, {
@@ -123,5 +116,5 @@ export default compose(
       },
     }),
   }),
-  placeholder,
+  placeholderLoader({ dark: true }),
 )(People);

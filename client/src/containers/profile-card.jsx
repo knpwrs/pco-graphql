@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import window from 'global/window';
 import g, { Div } from 'glamorous';
 import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent, withHandlers, compose } from 'recompose';
+import { withHandlers, compose } from 'recompose';
+import { placeholderLoader } from '../components/loader';
 
 const ProfileCardText = g.div({
   flexGrow: 1,
@@ -68,16 +69,9 @@ const currentUser = gql`
   }
 `;
 
-const placeholder = branch(
-  ({ data }) => data.loading,
-  renderComponent(props => (
-    <Div {...props} backgroundColor="#F3F3F3" textAlign="center" width="250px" height="50px" />
-  )),
-);
-
 export default compose(
   graphql(currentUser),
-  placeholder,
+  placeholderLoader({ light: true, width: '100px' }),
   withHandlers({
     logout: () => () => {
       window.location = '/auth/logout';

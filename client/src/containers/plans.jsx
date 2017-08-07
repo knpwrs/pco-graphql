@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent, compose } from 'recompose';
-import g, { Div, Table } from 'glamorous';
+import { compose } from 'recompose';
+import g, { Table } from 'glamorous';
 import Page from '../components/page';
 import Card from '../components/card';
+import { placeholderLoader } from '../components/loader';
 
 const plansQuery = gql`
   query PlansQuery {
@@ -109,14 +110,7 @@ Plans.propTypes = {
   }).isRequired,
 };
 
-const placeholder = branch(
-  ({ data }) => data.loading,
-  renderComponent(props => (
-    <Div {...props} backgroundColor="#F3F3F3" textAlign="center" width="100%" height="100%" />
-  )),
-);
-
 export default compose(
   graphql(plansQuery),
-  placeholder,
+  placeholderLoader({ dark: true }),
 )(Plans);
