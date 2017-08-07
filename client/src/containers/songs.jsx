@@ -4,6 +4,7 @@ import { gql, graphql } from 'react-apollo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withHandlers } from 'recompose';
+import { translate } from 'react-i18next';
 import g, { Div } from 'glamorous';
 import { find, filter, identity, prop, match, map, compose } from 'ramda';
 import Page from '../components/page';
@@ -82,14 +83,14 @@ const SongFile = withHandlers({
   }),
 })(BareSongFile);
 
-const BareSongFiles = ({ song, thumb, actions }) => {
+const BareSongFiles = ({ song, thumb, actions, t }) => {
   const streamable = filterStreamable(song.attachments);
   return (
     <Div flexGrow="1" marginLeft="10px">
       {streamable.length > 0
         ? streamable.map(
           file => <SongFile key={file.id} file={file} thumb={thumb} setSong={actions.setSong} />,
-        ) : <span>No Files</span>
+        ) : <span>{t('noFiles')}</span>
       }
     </Div>
   );
@@ -99,6 +100,7 @@ BareSongFiles.propTypes = {
   song: songShape.isRequired,
   actions: PropTypes.objectOf(PropTypes.func).isRequired,
   thumb: PropTypes.string,
+  t: PropTypes.func.isRequired,
 };
 
 BareSongFiles.defaultProps = {
@@ -113,7 +115,10 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(playerActions, dispatch),
 });
 
-const SongFiles = connect(mapStateToProps, mapDispatchToProps)(BareSongFiles);
+const SongFiles = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  translate('songs'),
+)(BareSongFiles);
 
 const SongInfo = ({ song }) => {
   const thumb = findThumbnailUrl(song.attachments);
@@ -139,8 +144,8 @@ SongCard.propTypes = {
   song: songShape.isRequired,
 };
 
-const Songs = ({ data, page }) => (
-  <Page title={`Songs (${data.totalSongs})`}>
+const Songs = ({ data, page, t }) => (
+  <Page title={`${t('songs')} (${data.totalSongs})`}>
     {data.songs.map(song => <SongCard key={song.id} song={song} />)}
     <PageNavBar
       root="songs"
@@ -158,6 +163,7 @@ Songs.propTypes = {
     songs: PropTypes.arrayOf(songShape),
   }).isRequired,
   page: PropTypes.number.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 export default compose(
@@ -171,4 +177,5 @@ export default compose(
     }),
   }),
   placeholderLoader(),
+  translate('pages'),
 )(Songs);

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { compose } from 'recompose';
 import g, { Table } from 'glamorous';
+import { translate } from 'react-i18next';
 import Page from '../components/page';
 import Card from '../components/card';
 import { placeholderLoader } from '../components/loader';
@@ -57,23 +58,26 @@ const LightText = g.span({
   opacity: 0.2,
 });
 
-const Plan = ({ plan }) => (
+const BarePlan = ({ plan, t }) => (
   <PlanRow>
     <DateCell>{plan.dates}</DateCell>
-    <TitleCell>{plan.title || <LightText>No Title</LightText>}</TitleCell>
+    <TitleCell>{plan.title || <LightText>{t('noTitle')}</LightText>}</TitleCell>
   </PlanRow>
 );
 
-Plan.propTypes = {
+BarePlan.propTypes = {
   plan: planShape.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
-const PlanRows = ({ plans }) => (
+const Plan = translate('plans')(BarePlan);
+
+const BarePlanRows = ({ plans, t }) => (
   <Table width="100%">
     <thead>
       <tr>
-        <ColHead>Date</ColHead>
-        <ColHead>Title</ColHead>
+        <ColHead>{t('date')}</ColHead>
+        <ColHead>{t('title')}</ColHead>
       </tr>
     </thead>
     <tbody>
@@ -82,24 +86,30 @@ const PlanRows = ({ plans }) => (
   </Table>
 );
 
-PlanRows.propTypes = {
+BarePlanRows.propTypes = {
   plans: PropTypes.arrayOf(planShape).isRequired,
+  t: PropTypes.func.isRequired,
 };
 
-const ServiceType = ({ type }) => (
+const PlanRows = translate('plans')(BarePlanRows);
+
+const BareServiceType = ({ type, t }) => (
   <Card title={type.name}>
     {type.plans.length > 0
       ? <PlanRows plans={type.plans} />
-      : <LightText>No plans found</LightText>}
+      : <LightText>{t('noPlans')}</LightText>}
   </Card>
 );
 
-ServiceType.propTypes = {
+BareServiceType.propTypes = {
   type: serviceTypeShape.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
-const Plans = ({ data }) => (
-  <Page title="Plans">
+const ServiceType = translate('plans')(BareServiceType);
+
+const Plans = ({ data, t }) => (
+  <Page title={t('plans')}>
     {data.serviceTypes.map(type => <ServiceType key={type.id} type={type} />)}
   </Page>
 );
@@ -108,9 +118,11 @@ Plans.propTypes = {
   data: PropTypes.shape({
     serviceTypes: PropTypes.arrayOf(serviceTypeShape),
   }).isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 export default compose(
   graphql(plansQuery),
   placeholderLoader(),
+  translate('pages'),
 )(Plans);

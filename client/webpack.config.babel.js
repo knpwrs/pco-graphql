@@ -30,6 +30,9 @@ const config = {
       exclude: /node_modules/,
       use: 'babel-loader',
     }, {
+      test: /\.ya?ml$/,
+      loaders: ['json-loader', 'yaml-loader'],
+    }, {
       test: /\.(ttf|eot|woff|woff2)$/,
       loader: 'file-loader',
     }],

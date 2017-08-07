@@ -1,0 +1,15 @@
+pages:
+  plans: Plans
+  people: People
+  songs: Songs
+plans:
+  date: Date
+  title: Title
+  noTitle: No Title
+  noPlans: No Plans Found
+songs:
+  noFiles: No Files
+common:
+  title: Planning Center GraphQL Demo
+  authenticate: Authenticate With Planning Center
+  logout: Logout

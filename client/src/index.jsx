@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { combineReducers } from 'redux';
 import { AppContainer } from 'react-hot-loader';
+import { I18nextProvider } from 'react-i18next';
 import { ApolloClient, ApolloProvider, createBatchingNetworkInterface } from 'react-apollo';
 import { any, propEq } from 'ramda';
 import document from 'global/document';
@@ -9,6 +10,7 @@ import window from 'global/window';
 import cookies from 'js-cookie';
 import Root from './root';
 import configureStore from './store/configure-store';
+import i18n from './i18n';
 import * as reducers from './reducers';
 
 const networkInterface = createBatchingNetworkInterface({
@@ -52,20 +54,24 @@ const store = configureStore(createRootReducer, reducers, apolloClient);
 const el = document.createElement('div');
 document.body.appendChild(el);
 
-const mount = Component => render((
+const mount = (InComponent, inI18n) => render((
   <AppContainer>
-    <ApolloProvider store={store} client={apolloClient}>
-      <Component />
-    </ApolloProvider>
+    <I18nextProvider i18n={inI18n}>
+      <ApolloProvider store={store} client={apolloClient}>
+        <InComponent />
+      </ApolloProvider>
+    </I18nextProvider>
   </AppContainer>
 ), el);
 
-mount(Root);
+mount(Root, i18n);
 
 if (module.hot) {
-  module.hot.accept('./root.jsx', async () => {
-    mount((await import('./root.jsx')).default);
-  });
+  const reload = async () => {
+    mount((await import('./root.jsx')).default, (await import('./i18n')).default);
+  };
+  module.hot.accept('./root.jsx', reload);
+  module.hot.accept('./i18n', reload);
   module.hot.accept('./reducers', async () => {
     store.replaceReducer(createRootReducer(await import('./reducers'), apolloClient));
   });

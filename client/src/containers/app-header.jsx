@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose, setDisplayName } from 'recompose';
 import { withRouter } from 'react-router-dom';
 import g, { Nav } from 'glamorous';
+import { translate } from 'react-i18next';
 import ProfileCard from './profile-card';
 import styledLink from '../components/styled-link';
 
@@ -44,15 +46,19 @@ const HeaderWrapper = g.header({
   borderColor: theme.borderColor,
 }));
 
-const AppHeader = () => (
+const AppHeader = ({ t }) => (
   <HeaderWrapper>
     <Nav display="flex">
-      <NavLink to="/plans">Plans</NavLink>
-      <NavLink to="/people">People</NavLink>
-      <NavLink to="/songs">Songs</NavLink>
+      <NavLink to="/plans">{t('plans')}</NavLink>
+      <NavLink to="/people">{t('people')}</NavLink>
+      <NavLink to="/songs">{t('songs')}</NavLink>
     </Nav>
-    <ProfileCard width="200px" lineHeight={headerHeight} />
+    <ProfileCard css={{ width: '200px', lineHeight: headerHeight }} lineHeight={headerHeight} />
   </HeaderWrapper>
 );
 
-export default AppHeader;
+AppHeader.propTypes = {
+  t: PropTypes.func.isRequired,
+};
+
+export default translate('pages')(AppHeader);

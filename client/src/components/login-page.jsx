@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import window from 'global/window';
 import g from 'glamorous';
-import { withHandlers } from 'recompose';
+import { translate } from 'react-i18next';
+import { withHandlers, compose } from 'recompose';
 import FullPageDiv from './full-page-div';
 
 const LoginHeader = g.h1((props, { bodyText }) => ({
@@ -26,19 +27,23 @@ const LoginButton = g.button((props, { bodyText, borderColor, lightBorderColor }
   },
 }));
 
-const BareLoginPage = ({ login }) => (
+const BareLoginPage = ({ login, t }) => (
   <FullPageDiv center column>
-    <LoginHeader>Planning Center GraphQL Demo</LoginHeader>
-    <LoginButton onClick={login}>Authenticate with Planning Center</LoginButton>
+    <LoginHeader>{t('title')}</LoginHeader>
+    <LoginButton onClick={login}>{t('authenticate')}</LoginButton>
   </FullPageDiv>
 );
 
 BareLoginPage.propTypes = {
   login: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
-export default withHandlers({
-  login: () => () => {
-    window.location = '/auth/login';
-  },
-})(BareLoginPage);
+export default compose(
+  withHandlers({
+    login: () => () => {
+      window.location = '/auth/login';
+    },
+  }),
+  translate(),
+)(BareLoginPage);

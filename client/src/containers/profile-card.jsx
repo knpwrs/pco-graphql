@@ -4,6 +4,7 @@ import window from 'global/window';
 import g, { Div } from 'glamorous';
 import { gql, graphql } from 'react-apollo';
 import { withHandlers, compose } from 'recompose';
+import { translate } from 'react-i18next';
 import { placeholderLoader } from '../components/loader';
 
 const ProfileCardText = g.div({
@@ -39,11 +40,11 @@ const LogoutLink = g.a((props, { headerText }) => ({
   },
 }));
 
-const ProfileCard = ({ data, logout, ...props }) => (
-  <Div {...props} display="flex" position="relative">
+const ProfileCard = ({ data, logout, t, css }) => (
+  <Div {...css} display="flex" position="relative">
     <ProfileCardImage src={data.me.avatar} />
     <ProfileCardText>{data.me.first_name} {data.me.last_name}</ProfileCardText>
-    <LogoutLink onClick={logout}>Logout</LogoutLink>
+    <LogoutLink onClick={logout}>{t('logout')}</LogoutLink>
   </Div>
 );
 
@@ -57,6 +58,12 @@ ProfileCard.propTypes = {
     }),
   }).isRequired,
   logout: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
+  css: PropTypes.objectOf(PropTypes.string),
+};
+
+ProfileCard.defaultProps = {
+  css: {},
 };
 
 const currentUser = gql`
@@ -77,4 +84,5 @@ export default compose(
       window.location = '/auth/logout';
     },
   }),
+  translate(),
 )(ProfileCard);
