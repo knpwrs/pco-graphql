@@ -1,0 +1,16 @@
+pages:
+  plans: Planes
+  people: Gente
+  songs: Canciones
+plans:
+  date: Fecha
+  title: Fecha
+  noTitle: Sin títulod
+  noPlans: No Se Encontraron Planes
+songs:
+  noFiles: Sin Archivos
+common:
+  title: Demostración GraphQL del Centro de Planificación
+  authenticate: Autenticar con el centro de planificación
+  logout: Cerrar sesión
+
