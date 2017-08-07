@@ -9,12 +9,16 @@ import { find, filter, identity, prop, match, map, compose } from 'ramda';
 import Page from '../components/page';
 import Card from '../components/card';
 import Thumbnail from '../components/thumbnail';
+import PageNavBar from '../components/page-nav-bar';
 import * as playerActions from '../actions/player';
+import withPage from '../util/with-page';
+
+const PER_PAGE = 10;
 
 const songsQuery = gql`
-  query SongsQuery {
+  query SongsQuery($offset: Int!, $per_page: Int!) {
     totalSongs
-    songs(order: title, per_page: 25) {
+    songs(order: title, per_page: $per_page, offset: $offset) {
       id
       title
       author
@@ -126,9 +130,16 @@ SongCard.propTypes = {
   song: songShape.isRequired,
 };
 
-const Songs = ({ data }) => (
+const Songs = ({ data, page }) => (
   <Page title={`Songs (${data.totalSongs})`}>
     {data.songs.map(song => <SongCard key={song.id} song={song} />)}
+    <PageNavBar
+      root="songs"
+      page={page}
+      perPage={PER_PAGE}
+      totalRecords={data.totalSongs}
+      currentRecords={data.songs.length}
+    />
   </Page>
 );
 
@@ -137,6 +148,7 @@ Songs.propTypes = {
     totalSongs: PropTypes.integer,
     songs: PropTypes.arrayOf(songShape),
   }).isRequired,
+  page: PropTypes.number.isRequired,
 };
 
 const placeholder = branch(
@@ -147,6 +159,14 @@ const placeholder = branch(
 );
 
 export default compose(
-  graphql(songsQuery),
+  withPage,
+  graphql(songsQuery, {
+    options: ({ page }) => ({
+      variables: {
+        offset: page * PER_PAGE,
+        per_page: PER_PAGE,
+      },
+    }),
+  }),
   placeholder,
 )(Songs);
