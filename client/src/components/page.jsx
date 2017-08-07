@@ -4,7 +4,7 @@ import g from 'glamorous';
 
 const PageWrap = g.div({
   width: '100%',
-  padding: '0 5% 5% 5%',
+  padding: '0 5% 60px 5%',
 }, (props, { bodyText }) => ({
   ...bodyText,
 }));

@@ -1,16 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent, compose } from 'recompose';
-import { pathOr } from 'ramda';
+import { branch, renderComponent, withProps } from 'recompose';
+import { pathOr, compose, merge, evolve, clamp } from 'ramda';
 import g, { Div } from 'glamorous';
+import qs from 'qs';
 import Page from '../components/page';
 import Card from '../components/card';
+import StyledLink from '../components/styled-link';
+
+const PER_PAGE = 10;
 
 const peopleQuery = gql`
-  query PeopleQuery {
+  query PeopleQuery($offset: Int!, $per_page: Int!) {
     totalPeople
-    people(order: first_name, per_page: 25) {
+    people(order: first_name, per_page: $per_page, offset: $offset) {
       id
       first_name
       last_name
@@ -81,9 +85,47 @@ PersonCard.propTypes = {
   person: personShape.isRequired,
 };
 
-const People = ({ data }) => (
+const PageNavLink = StyledLink({
+  textDecoration: 'none',
+}, ({ only, right }, { primaryColor }) => ({
+  textAlign: right ? 'right' : 'left',
+  color: primaryColor,
+  width: only ? '100%' : '50%',
+}));
+
+const PageNavBar = ({ root, page, perPage, totalRecords, currentRecords }) => {
+  const isFirstPage = page === 0;
+  const isSecondPage = page === 1;
+  const isLastPage = (page * perPage) + currentRecords >= totalRecords;
+
+  const prevTo = `/${root}${isSecondPage ? '' : `?page=${page - 1}`}`;
+  const nextTo = `/${root}?page=${page + 1}`;
+  return (
+    <Div display="flex">
+      {isFirstPage || <PageNavLink to={prevTo} only={isLastPage}>{'<'} Prev</PageNavLink>}
+      {isLastPage || <PageNavLink to={nextTo} only={isFirstPage} right>Next {'>'}</PageNavLink>}
+    </Div>
+  );
+};
+
+PageNavBar.propTypes = {
+  root: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  totalRecords: PropTypes.number.isRequired,
+  currentRecords: PropTypes.number.isRequired,
+};
+
+const People = ({ data, page }) => (
   <Page title={`People (${data.totalPeople})`}>
     {data.people.map(person => <PersonCard key={person.id} person={person} />)}
+    <PageNavBar
+      root="people"
+      page={page}
+      perPage={PER_PAGE}
+      totalRecords={data.totalPeople}
+      currentRecords={data.people.length}
+    />
   </Page>
 );
 
@@ -92,6 +134,7 @@ People.propTypes = {
     totalPeople: PropTypes.integer,
     people: PropTypes.arrayOf(personShape),
   }).isRequired,
+  page: PropTypes.number.isRequired,
 };
 
 const placeholder = branch(
@@ -101,7 +144,24 @@ const placeholder = branch(
   )),
 );
 
+const parseQueryArgs = compose(
+  evolve({ page: compose(clamp(0, Infinity), parseInt) }),
+  merge({ page: 0 }),
+  qs.parse,
+  search => search.substr(1),
+);
+
 export default compose(
-  graphql(peopleQuery),
+  withProps(({ location }) => ({
+    page: parseQueryArgs(location.search).page,
+  })),
+  graphql(peopleQuery, {
+    options: ({ page }) => ({
+      variables: {
+        offset: page * PER_PAGE,
+        per_page: PER_PAGE,
+      },
+    }),
+  }),
   placeholder,
 )(People);
