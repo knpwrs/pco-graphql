@@ -38,19 +38,16 @@ const themes = {
   plans: {
     ...baseTheme,
     primaryColor: colors.green,
-    loaderColor: colors.green,
     highlightColor: colors.transparentGreen,
   },
   people: {
     ...baseTheme,
     primaryColor: colors.blue,
-    loaderColor: colors.blue,
     highlightColor: colors.transparentBlue,
   },
   songs: {
     ...baseTheme,
     primaryColor: colors.orange,
-    loaderColor: colors.orange,
     highlightColor: colors.transparentOrange,
   },
 };

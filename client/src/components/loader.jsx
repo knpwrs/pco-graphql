@@ -17,10 +17,10 @@ const loading = css.keyframes('loading', {
   },
 });
 
-const Loader = g.div(({ color }, { loaderColor }) => ({
+const Loader = g.div(({ color }, { primaryColor }) => ({
   width: '40px',
   height: '40px',
-  backgroundColor: color || loaderColor,
+  backgroundColor: color || primaryColor,
   borderRadius: '100%',
   animation: `${loading} 1s infinite ${easing}`,
 }));
