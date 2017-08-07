@@ -9,6 +9,8 @@ plans:
   noPlans: Aucun Plan Trouvé
 songs:
   noFiles: Aucun Fichier
+player:
+  nowPlaying: Lecture en Cours
 common:
   title: Centre de Planification GraphQL Demo
   authenticate: Authentification Avec le Centre de Planification

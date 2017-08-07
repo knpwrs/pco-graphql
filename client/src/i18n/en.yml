@@ -9,6 +9,8 @@ plans:
   noPlans: No Plans Found
 songs:
   noFiles: No Files
+player:
+  nowPlaying: Now Playing
 common:
   title: Planning Center GraphQL Demo
   authenticate: Authenticate With Planning Center

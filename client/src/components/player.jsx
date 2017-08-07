@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import g from 'glamorous';
 import { branch, renderNothing } from 'recompose';
+import { translate } from 'react-i18next';
 import { complement, prop } from 'ramda';
 import Thumbnail from './thumbnail';
 
@@ -34,10 +35,10 @@ const NowPlaying = g.div((props, { headerText }) => ({
   lineHeight: playerHeight,
 }));
 
-const Player = ({ url, thumb, title, close }) => (
+const Player = ({ url, thumb, title, close, t }) => (
   <PlayerWrapper>
     <Thumbnail thumb={thumb} size={playerHeight} />
-    <NowPlaying>Now Playing: {title}</NowPlaying>
+    <NowPlaying>{t('nowPlaying')}: {title}</NowPlaying>
     <CloseButton onClick={close}>X</CloseButton>
     <audio src={url} autoPlay />
   </PlayerWrapper>
@@ -48,6 +49,7 @@ Player.propTypes = {
   title: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
   thumb: PropTypes.string,
+  t: PropTypes.func.isRequired,
 };
 
 Player.defaultProps = {
@@ -57,4 +59,5 @@ Player.defaultProps = {
 export default branch(
   complement(prop('url')),
   renderNothing,
+  translate('player'),
 )(Player);

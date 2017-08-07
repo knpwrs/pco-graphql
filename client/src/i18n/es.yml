@@ -9,6 +9,8 @@ plans:
   noPlans: No Se Encontraron Planes
 songs:
   noFiles: Sin Archivos
+player:
+  nowPlaying: Jugando Ahora
 common:
   title: Demostración GraphQL del Centro de Planificación
   authenticate: Autenticar con el centro de planificación
