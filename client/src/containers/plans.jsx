@@ -112,5 +112,5 @@ Plans.propTypes = {
 
 export default compose(
   graphql(plansQuery),
-  placeholderLoader({ dark: true }),
+  placeholderLoader(),
 )(Plans);

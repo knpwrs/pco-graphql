@@ -17,10 +17,10 @@ const loading = css.keyframes('loading', {
   },
 });
 
-const Loader = g.div(({ dark, light }, { borderColor, lightBorderColor }) => ({
+const Loader = g.div(({ color }, { loaderColor }) => ({
   width: '40px',
   height: '40px',
-  backgroundColor: (dark && borderColor) || (light && lightBorderColor),
+  backgroundColor: color || loaderColor,
   borderRadius: '100%',
   animation: `${loading} 1s infinite ${easing}`,
 }));
@@ -43,7 +43,7 @@ FullSpaceLoader.defaultProps = {
   height: '100%',
 };
 
-export const placeholderLoader = props => branch(
+export const placeholderLoader = (props = {}) => branch(
   ({ data }) => data.loading,
   renderComponent(() => <FullSpaceLoader {...props} />),
 );

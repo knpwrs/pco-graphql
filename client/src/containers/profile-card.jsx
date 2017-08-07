@@ -71,7 +71,7 @@ const currentUser = gql`
 
 export default compose(
   graphql(currentUser),
-  placeholderLoader({ light: true, width: '100px' }),
+  placeholderLoader({ color: 'white', width: '100px' }),
   withHandlers({
     logout: () => () => {
       window.location = '/auth/logout';

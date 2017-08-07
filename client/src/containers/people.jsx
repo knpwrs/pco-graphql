@@ -116,5 +116,5 @@ export default compose(
       },
     }),
   }),
-  placeholderLoader({ dark: true }),
+  placeholderLoader(),
 )(People);
