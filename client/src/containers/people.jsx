@@ -87,7 +87,7 @@ PersonCard.propTypes = {
 };
 
 const People = ({ data, page, t }) => (
-  <Page title={`${t('people')} (${data.totalPeople})`}>
+  <Page title={t('title', data)}>
     {data.people.map(person => <PersonCard key={person.id} person={person} />)}
     <PageNavBar
       root="people"
@@ -119,5 +119,5 @@ export default compose(
     }),
   }),
   placeholderLoader(),
-  translate('pages'),
+  translate('people'),
 )(People);

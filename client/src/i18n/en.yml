@@ -7,10 +7,13 @@ plans:
   title: Title
   noTitle: No Title
   noPlans: No Plans Found
+people:
+  title: "People ({{totalPeople}})"
 songs:
   noFiles: No Files
+  title: "Songs ({{totalSongs}})"
 player:
-  nowPlaying: Now Playing
+  nowPlaying: "Now Playing: {{title}}"
 common:
   title: Planning Center GraphQL Demo
   authenticate: Authenticate With Planning Center

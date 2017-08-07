@@ -38,7 +38,7 @@ const NowPlaying = g.div((props, { headerText }) => ({
 const Player = ({ url, thumb, title, close, t }) => (
   <PlayerWrapper>
     <Thumbnail thumb={thumb} size={playerHeight} />
-    <NowPlaying>{t('nowPlaying')}: {title}</NowPlaying>
+    <NowPlaying>{t('nowPlaying', { title })}</NowPlaying>
     <CloseButton onClick={close}>X</CloseButton>
     <audio src={url} autoPlay />
   </PlayerWrapper>

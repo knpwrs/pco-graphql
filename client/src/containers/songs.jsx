@@ -145,7 +145,7 @@ SongCard.propTypes = {
 };
 
 const Songs = ({ data, page, t }) => (
-  <Page title={`${t('songs')} (${data.totalSongs})`}>
+  <Page title={t('title', data)}>
     {data.songs.map(song => <SongCard key={song.id} song={song} />)}
     <PageNavBar
       root="songs"
@@ -177,5 +177,5 @@ export default compose(
     }),
   }),
   placeholderLoader(),
-  translate('pages'),
+  translate('songs'),
 )(Songs);
