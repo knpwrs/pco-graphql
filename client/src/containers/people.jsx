@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 import { pathOr, compose } from 'ramda';
 import g, { Div } from 'glamorous';
+import { translate } from 'react-i18next';
 import Page from '../components/page';
 import Card from '../components/card';
 import PageNavBar from '../components/page-nav-bar';
@@ -85,8 +86,8 @@ PersonCard.propTypes = {
   person: personShape.isRequired,
 };
 
-const People = ({ data, page }) => (
-  <Page title={`People (${data.totalPeople})`}>
+const People = ({ data, page, t }) => (
+  <Page title={`${t('people')} (${data.totalPeople})`}>
     {data.people.map(person => <PersonCard key={person.id} person={person} />)}
     <PageNavBar
       root="people"
@@ -104,6 +105,7 @@ People.propTypes = {
     people: PropTypes.arrayOf(personShape),
   }).isRequired,
   page: PropTypes.number.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 export default compose(
@@ -117,4 +119,5 @@ export default compose(
     }),
   }),
   placeholderLoader(),
+  translate('pages'),
 )(People);
