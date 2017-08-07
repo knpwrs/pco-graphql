@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent } from 'recompose';
-import { Div, Img } from 'glamorous';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { branch, renderComponent, withHandlers } from 'recompose';
+import { Div } from 'glamorous';
 import { find, filter, identity, prop, match, map, compose } from 'ramda';
 import Page from '../components/page';
 import Card from '../components/card';
+import Thumbnail from '../components/thumbnail';
+import * as playerActions from '../actions/player';
 
 const songsQuery = gql`
   query SongsQuery {
@@ -46,39 +50,67 @@ const findThumbnailUrl = compose(
   map(getThumbnailUrl),
 );
 
-const Thumbnail = ({ attachments }) => {
-  const url = findThumbnailUrl(attachments);
+const filterStreamable = filter(prop('streamable'));
+
+const BareSongFile = ({ toggleSong, file }) => (
+  <Div key={file.id} fontWeight={200} onClick={toggleSong}>{file.filename}</Div>
+);
+
+BareSongFile.propTypes = {
+  toggleSong: PropTypes.func.isRequired,
+  file: attachmentShape.isRequired,
+};
+
+const SongFile = withHandlers({
+  toggleSong: ({ file, thumb, setSong }) => () => setSong({
+    thumb,
+    url: file.url,
+    title: file.filename,
+  }),
+})(BareSongFile);
+
+const BareSongFiles = ({ song, thumb, actions }) => {
+  const streamable = filterStreamable(song.attachments);
   return (
-    <Div width="150px" height="150px" backgroundColor="#EEE">
-      {url ? <Img src={url} width="100%" height="100%" /> : null}
+    <Div flexGrow="1" marginLeft="10px">
+      {streamable.length > 0
+        ? streamable.map(
+          file => <SongFile key={file.id} file={file} thumb={thumb} setSong={actions.setSong} />,
+        ) : <span>No Files</span>
+      }
     </Div>
   );
 };
 
-Thumbnail.propTypes = {
-  attachments: PropTypes.arrayOf(attachmentShape).isRequired,
+BareSongFiles.propTypes = {
+  song: songShape.isRequired,
+  actions: PropTypes.objectOf(PropTypes.func).isRequired,
+  thumb: PropTypes.string,
 };
 
-const filterStreamable = filter(prop('streamable'));
-
-const SongFiles = ({ attachments }) => (
-  <Div flexGrow="1" marginLeft="10px">
-    {filterStreamable(attachments).map(file => (
-      <Div key={file.id} fontWeight={200}>{file.filename}</Div>
-    ))}
-  </Div>
-);
-
-SongFiles.propTypes = {
-  attachments: PropTypes.arrayOf(attachmentShape).isRequired,
+BareSongFiles.defaultProps = {
+  thumb: null,
 };
 
-const SongInfo = ({ song }) => (
-  <Div display="flex">
-    <Thumbnail attachments={song.attachments} />
-    <SongFiles attachments={song.attachments} />
-  </Div>
-);
+const mapStateToProps = ({ player }) => ({
+  playerSong: player.song,
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(playerActions, dispatch),
+});
+
+const SongFiles = connect(mapStateToProps, mapDispatchToProps)(BareSongFiles);
+
+const SongInfo = ({ song }) => {
+  const thumb = findThumbnailUrl(song.attachments);
+  return (
+    <Div display="flex">
+      <Thumbnail thumb={thumb} size="150px" />
+      <SongFiles song={song} thumb={thumb} />
+    </Div>
+  );
+};
 
 SongInfo.propTypes = {
   song: songShape.isRequired,

@@ -7,6 +7,7 @@ import AppHeader from './containers/app-header';
 import Plans from './containers/plans';
 import People from './containers/people';
 import Songs from './containers/songs';
+import Player from './containers/player';
 
 css.global('body', {
   backgroundColor: '#FCFCFC',
@@ -23,6 +24,7 @@ const Root = () => (
           <Route path="/songs" component={Songs} />
           <Redirect to="/plans" />
         </Switch>
+        <Player />
       </Div>
     </ThemeByRouteProvider>
   </Router>
