@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import g from 'glamorous';
 
-const PageWrap = g.div({
+const PageWrap = g.div(({ playerOpen }) => ({
   width: '100%',
-  padding: '0 5% 60px 5%',
-}, (props, { bodyText }) => ({
+  padding: `0 5% ${playerOpen ? '60px' : '20px'} 5%`,
+}), (props, { bodyText }) => ({
   ...bodyText,
 }));
 
@@ -15,8 +16,8 @@ const PageTitle = g.h2({
   fontSize: '30px',
 });
 
-const Page = ({ title, children }) => (
-  <PageWrap>
+const Page = ({ title, playerOpen, children }) => (
+  <PageWrap playerOpen={playerOpen}>
     <PageTitle>{title}</PageTitle>
     {children}
   </PageWrap>
@@ -25,6 +26,11 @@ const Page = ({ title, children }) => (
 Page.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  playerOpen: PropTypes.bool.isRequired,
 };
 
-export default Page;
+const mapStateToProps = ({ player }) => ({
+  playerOpen: !!player.url,
+});
+
+export default connect(mapStateToProps)(Page);
