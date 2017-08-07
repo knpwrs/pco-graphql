@@ -31,8 +31,9 @@ networkInterface.useAfter([{
       // For some reason directly interacting with a history object after a 401
       // results in a DOMException. Let's do a traditional redirect.
       window.location = '/login';
+    } else {
+      next();
     }
-    next();
   },
 }]);
 
