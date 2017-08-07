@@ -7,7 +7,7 @@ import g, { Div } from 'glamorous';
 import qs from 'qs';
 import Page from '../components/page';
 import Card from '../components/card';
-import StyledLink from '../components/styled-link';
+import PageNavBar from '../components/page-nav-bar';
 
 const PER_PAGE = 10;
 
@@ -83,37 +83,6 @@ const PersonCard = ({ person }) => (
 
 PersonCard.propTypes = {
   person: personShape.isRequired,
-};
-
-const PageNavLink = StyledLink({
-  textDecoration: 'none',
-}, ({ only, right }, { primaryColor }) => ({
-  textAlign: right ? 'right' : 'left',
-  color: primaryColor,
-  width: only ? '100%' : '50%',
-}));
-
-const PageNavBar = ({ root, page, perPage, totalRecords, currentRecords }) => {
-  const isFirstPage = page === 0;
-  const isSecondPage = page === 1;
-  const isLastPage = (page * perPage) + currentRecords >= totalRecords;
-
-  const prevTo = `/${root}${isSecondPage ? '' : `?page=${page - 1}`}`;
-  const nextTo = `/${root}?page=${page + 1}`;
-  return (
-    <Div display="flex">
-      {isFirstPage || <PageNavLink to={prevTo} only={isLastPage}>{'<'} Prev</PageNavLink>}
-      {isLastPage || <PageNavLink to={nextTo} only={isFirstPage} right>Next {'>'}</PageNavLink>}
-    </Div>
-  );
-};
-
-PageNavBar.propTypes = {
-  root: PropTypes.string.isRequired,
-  page: PropTypes.number.isRequired,
-  perPage: PropTypes.number.isRequired,
-  totalRecords: PropTypes.number.isRequired,
-  currentRecords: PropTypes.number.isRequired,
 };
 
 const People = ({ data, page }) => (
