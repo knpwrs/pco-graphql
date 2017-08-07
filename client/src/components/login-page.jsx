@@ -21,6 +21,9 @@ const LoginButton = g.button((props, { bodyText, borderColor, lightBorderColor }
     backgroundColor: borderColor,
     color: lightBorderColor,
   },
+  ':focus': {
+    outline: 0,
+  },
 }));
 
 const BareLoginPage = ({ login }) => (
