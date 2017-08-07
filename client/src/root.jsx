@@ -36,10 +36,10 @@ const Root = () => (
   // points. This approach uses more code, but easier to reason about and leads
   // to cleaner output.
   <Router>
-    <Switch>
-      <Route path="/login" component={LoginPage} />
-      <Route path="/">
-        <ThemeByRouteProvider>
+    <ThemeByRouteProvider>
+      <Switch>
+        <Route path="/login" component={LoginPage} />
+        <Route path="/">
           <FullPageDiv>
             <AppHeader />
             <Switch>
@@ -50,9 +50,9 @@ const Root = () => (
             </Switch>
             <Player />
           </FullPageDiv>
-        </ThemeByRouteProvider>
-      </Route>
-    </Switch>
+        </Route>
+      </Switch>
+    </ThemeByRouteProvider>
   </Router>
 );
 
