@@ -4,7 +4,7 @@ import { gql, graphql } from 'react-apollo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { branch, renderComponent, withHandlers } from 'recompose';
-import { Div } from 'glamorous';
+import g, { Div } from 'glamorous';
 import { find, filter, identity, prop, match, map, compose } from 'ramda';
 import Page from '../components/page';
 import Card from '../components/card';
@@ -56,8 +56,16 @@ const findThumbnailUrl = compose(
 
 const filterStreamable = filter(prop('streamable'));
 
+const FileRow = g.div((props, { highlightColor }) => ({
+  fontWeight: 200,
+  ':hover': {
+    backgroundColor: highlightColor,
+    cursor: 'pointer',
+  },
+}));
+
 const BareSongFile = ({ toggleSong, file }) => (
-  <Div key={file.id} fontWeight={200} onClick={toggleSong}>{file.filename}</Div>
+  <FileRow key={file.id} onClick={toggleSong}>{file.filename}</FileRow>
 );
 
 BareSongFile.propTypes = {
