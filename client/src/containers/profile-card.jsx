@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import window from 'global/window';
 import g, { Div } from 'glamorous';
 import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent, compose } from 'recompose';
+import { branch, renderComponent, withHandlers, compose } from 'recompose';
 
 const ProfileCardText = g.div({
   flexGrow: 1,
@@ -18,10 +19,30 @@ const ProfileCardImage = g.img({
   borderColor: theme.borderColor,
 }));
 
-const ProfileCard = ({ data, ...props }) => (
-  <Div {...props} display="flex">
+const LogoutLink = g.a((props, { headerText }) => ({
+  ...headerText,
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  display: 'flex',
+  width: '100%',
+  height: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  opacity: 0,
+  transition: 'opacity 250ms',
+  ':hover': {
+    opacity: 1,
+    cursor: 'pointer',
+  },
+}));
+
+const ProfileCard = ({ data, logout, ...props }) => (
+  <Div {...props} display="flex" position="relative">
     <ProfileCardImage src={data.me.avatar} />
     <ProfileCardText>{data.me.first_name} {data.me.last_name}</ProfileCardText>
+    <LogoutLink onClick={logout}>Logout</LogoutLink>
   </Div>
 );
 
@@ -34,6 +55,7 @@ ProfileCard.propTypes = {
       avatar: PropTypes.string,
     }),
   }).isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const currentUser = gql`
@@ -56,4 +78,9 @@ const placeholder = branch(
 export default compose(
   graphql(currentUser),
   placeholder,
+  withHandlers({
+    logout: () => () => {
+      window.location = '/auth/logout';
+    },
+  }),
 )(ProfileCard);

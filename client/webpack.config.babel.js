@@ -3,6 +3,7 @@
 const webpack = require('webpack');
 const { join } = require('path');
 const HtmlPlugin = require('html-webpack-plugin');
+const PreloadPlugin = require('preload-webpack-plugin');
 const BabiliPlugin = require('babili-webpack-plugin');
 
 const context = __dirname;
@@ -36,6 +37,9 @@ const config = {
   plugins: [
     new HtmlPlugin({
       title: 'PCO GraphQL Demo',
+    }),
+    new PreloadPlugin({
+      fileBlacklist: [/\.hot-update\.js$/],
     }),
   ],
 };
