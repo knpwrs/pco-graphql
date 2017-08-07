@@ -1,11 +1,10 @@
 import React from 'react';
-import window from 'global/window';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { css } from 'glamor';
 import loadable from 'react-loadable';
-import { withHandlers } from 'recompose';
 import ThemeByRouteProvider from './components/theme-by-route-provider';
 import FullPageDiv from './components/full-page-div';
+import LoginPage from './components/login-page';
 import AppHeader from './containers/app-header';
 import Player from './containers/player';
 
@@ -30,12 +29,6 @@ const Songs = loadable({
   loading,
 });
 
-const LoginButton = withHandlers({
-  login: () => () => {
-    window.location = '/auth/login';
-  },
-})(({ login }) => <button onClick={login}>Authenticate with Planning Center</button>);
-
 const Root = () => (
   // The route as well as routes expect single children as does the theme
   // provider. To work around this without nesting divs forever we essentially
@@ -44,12 +37,7 @@ const Root = () => (
   // to cleaner output.
   <Router>
     <Switch>
-      <Route path="/login">
-        <FullPageDiv center column>
-          <h1>Planning Center GraphQL Demo</h1>
-          <LoginButton />
-        </FullPageDiv>
-      </Route>
+      <Route path="/login" component={LoginPage} />
       <Route path="/">
         <ThemeByRouteProvider>
           <FullPageDiv>
