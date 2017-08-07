@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
-import { branch, renderComponent, withProps } from 'recompose';
-import { pathOr, compose, merge, evolve, clamp } from 'ramda';
+import { branch, renderComponent } from 'recompose';
+import { pathOr, compose } from 'ramda';
 import g, { Div } from 'glamorous';
-import qs from 'qs';
 import Page from '../components/page';
 import Card from '../components/card';
 import PageNavBar from '../components/page-nav-bar';
+import withPage from '../util/with-page';
 
 const PER_PAGE = 10;
 
@@ -113,17 +113,8 @@ const placeholder = branch(
   )),
 );
 
-const parseQueryArgs = compose(
-  evolve({ page: compose(clamp(0, Infinity), parseInt) }),
-  merge({ page: 0 }),
-  qs.parse,
-  search => search.substr(1),
-);
-
 export default compose(
-  withProps(({ location }) => ({
-    page: parseQueryArgs(location.search).page,
-  })),
+  withPage,
   graphql(peopleQuery, {
     options: ({ page }) => ({
       variables: {
