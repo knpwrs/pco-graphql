@@ -38,7 +38,9 @@ const config = {
     new HtmlPlugin({
       title: 'PCO GraphQL Demo',
     }),
-    new PreloadPlugin(),
+    new PreloadPlugin({
+      fileBlacklist: [/\.hot-update\.js$/],
+    }),
   ],
 };
 
