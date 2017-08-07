@@ -1,0 +1,15 @@
+pages:
+  plans: Des Plans
+  people: Gens
+  songs: Chansons
+plans:
+  date: Date
+  title: Titre
+  noTitle: Pas de Titre
+  noPlans: Aucun Plan Trouvé
+songs:
+  noFiles: Aucun Fichier
+common:
+  title: Centre de Planification GraphQL Demo
+  authenticate: Authentification Avec le Centre de Planification
+  logout: Déconnexion
