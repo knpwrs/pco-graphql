@@ -1,6 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import g, { Div } from 'glamorous';
 import { pathOr } from 'ramda';
+import { translate } from 'react-i18next';
 import LightText from '../light-text';
 import { personShape } from '../../shapes/people';
 
@@ -8,21 +10,27 @@ const Column = g.div({
   flex: 1,
 });
 
-const PhoneNumberSpan = ({ person }) => (
-  <span>{pathOr(<LightText text="No Phone Number" />, ['phone_numbers', 0, 'number'], person)}</span>
+const BarePhoneNumberSpan = ({ person, t }) => (
+  <span>{pathOr(<LightText text={t('noPhone')} />, ['phone_numbers', 0, 'number'], person)}</span>
 );
 
-PhoneNumberSpan.propTypes = {
+BarePhoneNumberSpan.propTypes = {
   person: personShape.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
-const EmailAddressSpan = ({ person }) => (
-  <span>{pathOr(<LightText text="No Email Address" />, ['emails', 0, 'address'], person)}</span>
+const PhoneNumberSpan = translate('people')(BarePhoneNumberSpan);
+
+const BareEmailAddressSpan = ({ person, t }) => (
+  <span>{pathOr(<LightText text={t('noEmail')} />, ['emails', 0, 'address'], person)}</span>
 );
 
-EmailAddressSpan.propTypes = {
+BareEmailAddressSpan.propTypes = {
   person: personShape.isRequired,
+  t: PropTypes.func.isRequired,
 };
+
+const EmailAddressSpan = translate('people')(BareEmailAddressSpan);
 
 const PersonInfo = ({ person }) => (
   <Div display="flex">
