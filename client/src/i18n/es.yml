@@ -7,10 +7,15 @@ plans:
   title: Fecha
   noTitle: Sin títulod
   noPlans: No Se Encontraron Planes
+people:
+  title: "Gente ({{totalPeople}})"
+  noEmail: No Hay Dirección de Correo Electrónico
+  noPhone: Sin Número de Teléfono
 songs:
   noFiles: Sin Archivos
+  title: "Canctiones ({{totalSongs}})"
 player:
-  nowPlaying: Jugando Ahora
+  nowPlaying: "Ahora tocando: {{title}}"
 common:
   title: Demostración GraphQL del Centro de Planificación
   authenticate: Autenticar con el centro de planificación
