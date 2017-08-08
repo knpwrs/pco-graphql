@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gql, graphql } from 'react-apollo';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withHandlers } from 'recompose';
+import { bindActionCreators } from 'redux';
+import { gql, graphql } from 'react-apollo';
 import { translate } from 'react-i18next';
-import g, { Div } from 'glamorous';
-import { find, filter, identity, prop, match, map, compose } from 'ramda';
+import { compose } from 'ramda';
 import Page from '../components/page';
-import Card from '../components/card';
-import Thumbnail from '../components/thumbnail';
 import PageNavBar from '../components/page-nav-bar';
-import * as playerActions from '../actions/player';
+import SongCard from '../components/songs/song-card';
 import withPage from '../util/with-page';
 import { placeholderLoader } from '../components/loader';
+import { songShape } from '../shapes/songs';
+import * as playerActions from '../actions/player';
 
 const PER_PAGE = 10;
 
@@ -35,118 +33,9 @@ const songsQuery = gql`
   }
 `;
 
-const attachmentShape = PropTypes.shape({
-  filename: PropTypes.string,
-  url: PropTypes.string,
-  streamble: PropTypes.boolean,
-  thumbnail_url: PropTypes.string,
-});
-
-const songShape = PropTypes.shape({
-  id: PropTypes.string,
-  title: PropTypes.string,
-  author: PropTypes.string,
-  attachments: PropTypes.arrayOf(attachmentShape),
-});
-
-const getThumbnailUrl = prop('thumbnail_url');
-const findThumbnailUrl = compose(
-  find(match(/\.(png|jpg|gif)$/)),
-  filter(identity),
-  map(getThumbnailUrl),
-);
-
-const filterStreamable = filter(prop('streamable'));
-
-const FileRow = g.div((props, { highlightColor }) => ({
-  fontWeight: 200,
-  ':hover': {
-    backgroundColor: highlightColor,
-    cursor: 'pointer',
-  },
-}));
-
-const BareSongFile = ({ toggleSong, file }) => (
-  <FileRow key={file.id} onClick={toggleSong}>{file.filename}</FileRow>
-);
-
-BareSongFile.propTypes = {
-  toggleSong: PropTypes.func.isRequired,
-  file: attachmentShape.isRequired,
-};
-
-const SongFile = withHandlers({
-  toggleSong: ({ file, thumb, setSong }) => () => setSong({
-    thumb,
-    url: file.url,
-    title: file.filename,
-  }),
-})(BareSongFile);
-
-const BareSongFiles = ({ song, thumb, actions, t }) => {
-  const streamable = filterStreamable(song.attachments);
-  return (
-    <Div flexGrow="1" marginLeft="10px">
-      {streamable.length > 0
-        ? streamable.map(
-          file => <SongFile key={file.id} file={file} thumb={thumb} setSong={actions.setSong} />,
-        ) : <span>{t('noFiles')}</span>
-      }
-    </Div>
-  );
-};
-
-BareSongFiles.propTypes = {
-  song: songShape.isRequired,
-  actions: PropTypes.objectOf(PropTypes.func).isRequired,
-  thumb: PropTypes.string,
-  t: PropTypes.func.isRequired,
-};
-
-BareSongFiles.defaultProps = {
-  thumb: null,
-};
-
-const mapStateToProps = ({ player }) => ({
-  playerSong: player.song,
-});
-
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(playerActions, dispatch),
-});
-
-const SongFiles = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  translate('songs'),
-)(BareSongFiles);
-
-const SongInfo = ({ song }) => {
-  const thumb = findThumbnailUrl(song.attachments);
-  return (
-    <Div display="flex">
-      <Thumbnail thumb={thumb} size="150px" />
-      <SongFiles song={song} thumb={thumb} />
-    </Div>
-  );
-};
-
-SongInfo.propTypes = {
-  song: songShape.isRequired,
-};
-
-const SongCard = ({ song }) => (
-  <Card title={song.title}>
-    <SongInfo song={song} />
-  </Card>
-);
-
-SongCard.propTypes = {
-  song: songShape.isRequired,
-};
-
-const Songs = ({ data, page, t }) => (
+const Songs = ({ data, page, actions, t }) => (
   <Page title={t('title', data)}>
-    {data.songs.map(song => <SongCard key={song.id} song={song} />)}
+    {data.songs.map(song => <SongCard key={song.id} song={song} setSong={actions.setSong} />)}
     <PageNavBar
       root="songs"
       page={page}
@@ -164,7 +53,16 @@ Songs.propTypes = {
   }).isRequired,
   page: PropTypes.number.isRequired,
   t: PropTypes.func.isRequired,
+  actions: PropTypes.objectOf(PropTypes.func).isRequired,
 };
+
+const mapStateToProps = ({ player }) => ({
+  playerSong: player.song,
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(playerActions, dispatch),
+});
 
 export default compose(
   withPage,
@@ -177,5 +75,6 @@ export default compose(
     }),
   }),
   placeholderLoader(),
+  connect(mapStateToProps, mapDispatchToProps),
   translate('songs'),
 )(Songs);

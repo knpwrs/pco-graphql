@@ -9,6 +9,8 @@ plans:
   noPlans: No Plans Found
 people:
   title: "People ({{totalPeople}})"
+  noEmail: No Email Address
+  noPhone: No Phone Number
 songs:
   noFiles: No Files
   title: "Songs ({{totalSongs}})"
