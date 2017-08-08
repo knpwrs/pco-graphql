@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import window from 'global/window';
 import g, { Div } from 'glamorous';
 import { gql, graphql } from 'react-apollo';
-import { withHandlers, compose } from 'recompose';
+import { withHandlers } from 'recompose';
+import { compose } from 'ramda';
 import { translate } from 'react-i18next';
 import { placeholderLoader } from '../components/loader';
 

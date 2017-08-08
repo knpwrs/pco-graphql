@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { compose, pure } from 'recompose';
+import { pure } from 'recompose';
+import { compose } from 'ramda';
 import * as playerActions from '../actions/player';
 import Player from '../components/player';
 

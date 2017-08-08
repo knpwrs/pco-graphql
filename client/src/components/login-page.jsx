@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import window from 'global/window';
 import g from 'glamorous';
 import { translate } from 'react-i18next';
-import { withHandlers, compose } from 'recompose';
+import { withHandlers } from 'recompose';
+import { compose } from 'ramda';
 import FullPageDiv from './full-page-div';
 
 const LoginHeader = g.h1((props, { bodyText }) => ({

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
-import { compose } from 'recompose';
+import { compose } from 'ramda';
 import { translate } from 'react-i18next';
 import Page from '../components/page';
 import ServiceType from '../components/plans/service-type';

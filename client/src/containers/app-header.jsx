@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, setDisplayName } from 'recompose';
+import { setDisplayName } from 'recompose';
+import { compose } from 'ramda';
 import { withRouter } from 'react-router-dom';
 import g, { Nav } from 'glamorous';
 import { translate } from 'react-i18next';
