@@ -20,3 +20,5 @@ common:
   title: Centre de Planification GraphQL Demo
   authenticate: Authentification Avec le Centre de Planification
   logout: Déconnexion
+  next: Prochain
+  prev: Précédent

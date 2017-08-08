@@ -20,4 +20,5 @@ common:
   title: Demostración GraphQL del Centro de Planificación
   authenticate: Autenticar con el centro de planificación
   logout: Cerrar sesión
-
+  next: Siguiente
+  prev: Anterior

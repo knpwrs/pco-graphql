@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Div } from 'glamorous';
+import { translate } from 'react-i18next';
 import StyledLink from './styled-link';
 
 const PageNavLink = StyledLink({
@@ -11,7 +12,7 @@ const PageNavLink = StyledLink({
   width: only ? '100%' : '50%',
 }));
 
-const PageNavBar = ({ root, page, perPage, totalRecords, currentRecords }) => {
+const PageNavBar = ({ root, page, perPage, totalRecords, currentRecords, t }) => {
   const isFirstPage = page === 0;
   const isSecondPage = page === 1;
   const isLastPage = (page * perPage) + currentRecords >= totalRecords;
@@ -20,8 +21,8 @@ const PageNavBar = ({ root, page, perPage, totalRecords, currentRecords }) => {
   const nextTo = `/${root}?page=${page + 1}`;
   return (
     <Div display="flex">
-      {isFirstPage || <PageNavLink to={prevTo} only={isLastPage}>{'<'} Prev</PageNavLink>}
-      {isLastPage || <PageNavLink to={nextTo} only={isFirstPage} right>Next {'>'}</PageNavLink>}
+      {isFirstPage || <PageNavLink to={prevTo} only={isLastPage}>{'<'} {t('prev')}</PageNavLink>}
+      {isLastPage || <PageNavLink to={nextTo} only={isFirstPage} right>{t('next')} {'>'}</PageNavLink>}
     </Div>
   );
 };
@@ -32,6 +33,7 @@ PageNavBar.propTypes = {
   perPage: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
   currentRecords: PropTypes.number.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
-export default PageNavBar;
+export default translate()(PageNavBar);

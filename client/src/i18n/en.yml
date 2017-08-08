@@ -20,3 +20,5 @@ common:
   title: Planning Center GraphQL Demo
   authenticate: Authenticate With Planning Center
   logout: Logout
+  next: Next
+  prev: Prev
