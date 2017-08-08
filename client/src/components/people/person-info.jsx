@@ -1,6 +1,7 @@
 import React from 'react';
 import g, { Div } from 'glamorous';
 import { pathOr } from 'ramda';
+import LightText from '../light-text';
 import { personShape } from '../../shapes/people';
 
 const Column = g.div({
@@ -8,7 +9,7 @@ const Column = g.div({
 });
 
 const PhoneNumberSpan = ({ person }) => (
-  <span>{pathOr('No Phone Number', ['phone_numbers', 0, 'number'], person)}</span>
+  <span>{pathOr(<LightText text="No Phone Number" />, ['phone_numbers', 0, 'number'], person)}</span>
 );
 
 PhoneNumberSpan.propTypes = {
@@ -16,7 +17,7 @@ PhoneNumberSpan.propTypes = {
 };
 
 const EmailAddressSpan = ({ person }) => (
-  <span>{pathOr('No Email Address', ['emails', 0, 'address'], person)}</span>
+  <span>{pathOr(<LightText text="No Email Address" />, ['emails', 0, 'address'], person)}</span>
 );
 
 EmailAddressSpan.propTypes = {
