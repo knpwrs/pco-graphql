@@ -4,6 +4,7 @@ import g, { Div } from 'glamorous';
 import { pathOr, compose, assoc } from 'ramda';
 import { translate } from 'react-i18next';
 import { withState, withHandlers } from 'recompose';
+import { H3 } from '../typography';
 import LightText from '../light-text';
 import { personShape } from '../../shapes/people';
 
@@ -33,10 +34,9 @@ BareEmailAddressSpan.propTypes = {
 
 const EmailAddressSpan = translate('people')(BareEmailAddressSpan);
 
-const PersonInput = g.input((props, { borderLight }) => ({
+const PersonInput = g.input((props, { borderLight, h3 }) => ({
+  ...h3,
   fontSize: '1.17em',
-  fontWeight: 'bold',
-  margin: '1em 0',
   borderBottom: `1px dashed ${borderLight}`,
   borderTop: 0,
   borderLeft: 0,
@@ -94,7 +94,7 @@ const BarePersonInfo = ({ person, updatePerson, editing, toggleEditing }) => (
     <PersonForm person={person} updatePerson={updatePerson} doneEditing={toggleEditing} />
   ) : (
     <div onDoubleClick={toggleEditing}>
-      <h3>{person.first_name} {person.last_name}</h3>
+      <H3>{person.first_name} {person.last_name}</H3>
       <Div display="flex">
         <Column>
           <EmailAddressSpan person={person} />

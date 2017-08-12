@@ -32,6 +32,15 @@ const baseTheme = {
     fontFamily,
     color: colors.darkGray,
   },
+  h2: {
+    letterSpacing: '2px',
+    fontWeight: 500,
+    fontSize: '1.5em',
+  },
+  h3: {
+    fontWeight: 'bold',
+    margin: '1em 0',
+  },
 };
 
 const themes = {

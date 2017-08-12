@@ -4,11 +4,12 @@ import { translate } from 'react-i18next';
 import Card from '../card';
 import PlanRows from './plan-rows';
 import LightText from '../light-text';
+import { H3 } from '../typography';
 import { serviceTypeShape } from '../../shapes/plans';
 
 const BareServiceType = ({ type, t }) => (
   <Card title={type.name}>
-    <h3>{type.name}</h3>
+    <H3>{type.name}</H3>
     {type.plans.length > 0 ? (
       <PlanRows plans={type.plans} />
     ) : (
