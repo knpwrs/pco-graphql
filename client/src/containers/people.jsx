@@ -34,7 +34,7 @@ const peopleQuery = gql`
 `;
 
 const updatePersonMutation = gql`
-  mutation updatePerson($id: ID!, $first_name: String!, $last_name: String!) {
+  mutation UpdatePerson($id: ID!, $first_name: String!, $last_name: String!) {
     updatePerson(id: $id, attributes: { first_name: $first_name, last_name: $last_name }) {
       id
       __typename
@@ -44,12 +44,39 @@ const updatePersonMutation = gql`
   }
 `;
 
+const updateEmailMutation = gql`
+  mutation UpdateEmail($personId: ID!, $emailId: ID!, $values: EmailAttributes!) {
+    updateEmail(personId: $personId, emailId: $emailId, attributes: $values) {
+      id
+      __typename
+      address
+      location
+    }
+  }
+`;
 
-const People = ({ data, page, updatePerson, t }) => (
+const updatePhoneNumberMutation = gql`
+  mutation UpdatePhoneNumber($personId: ID!, $phoneNumberId: ID!, $values: PhoneNumberAttributes!) {
+    updatePhoneNumber(personId: $personId, phoneNumberId: $phoneNumberId, attributes: $values) {
+      id
+      __typename
+      number
+      location
+    }
+  }
+`;
+
+const People = ({ data, page, updatePerson, updateEmail, updatePhoneNumber, t }) => (
   <Page title={t('title', data)}>
     {data.error && 'THURS AN URRUR, SON'}
     {data.people.map(person => (
-      <PersonCard key={person.id} person={person} updatePerson={updatePerson} />
+      <PersonCard
+        key={person.id}
+        person={person}
+        updatePerson={updatePerson}
+        updateEmail={updateEmail}
+        updatePhoneNumber={updatePhoneNumber}
+      />
     ))}
     <PageNavBar
       root="people"
@@ -68,6 +95,8 @@ People.propTypes = {
   }).isRequired,
   page: PropTypes.number.isRequired,
   updatePerson: PropTypes.func.isRequired,
+  updateEmail: PropTypes.func.isRequired,
+  updatePhoneNumber: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
 };
 
@@ -93,6 +122,42 @@ export default compose(
               id,
               first_name,
               last_name,
+            },
+          },
+        });
+      },
+    }),
+  }),
+  graphql(updateEmailMutation, {
+    props: ({ mutate }) => ({
+      updateEmail({ personId, emailId, values }) {
+        return mutate({
+          variables: { personId, emailId, values },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateEmail: {
+              __typename: 'Email',
+              id: emailId,
+              address: values.address,
+              location: values.location,
+            },
+          },
+        });
+      },
+    }),
+  }),
+  graphql(updatePhoneNumberMutation, {
+    props: ({ mutate }) => ({
+      updatePhoneNumber({ personId, phoneNumberId, values }) {
+        return mutate({
+          variables: { personId, phoneNumberId, values },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updatePhoneNumber: {
+              __typename: 'PhoneNumber',
+              id: phoneNumberId,
+              number: values.number,
+              location: values.location,
             },
           },
         });
