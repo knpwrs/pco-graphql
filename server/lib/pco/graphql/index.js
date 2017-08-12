@@ -2,7 +2,7 @@ import promiseRouter from 'express-promise-router';
 import { graphqlExpress } from 'apollo-server-express';
 import schema from './schema';
 import makeLoader from '../loader';
-import { memoizedPostFactory, memoizedPatchFactory } from '../fetch';
+import { memoizedPostFactory, memoizedPatchFactory, memoizedDeleteFactory } from '../fetch';
 import { pcoAuthenticated } from '../auth';
 
 const app = promiseRouter();
@@ -18,6 +18,7 @@ app.use(graphqlExpress((req) => {
   // Also pass along post/patch functions
   const post = memoizedPostFactory(accessToken);
   const patch = memoizedPatchFactory(accessToken);
+  const del = memoizedDeleteFactory(accessToken);
   return {
     schema,
     context: {
@@ -25,6 +26,7 @@ app.use(graphqlExpress((req) => {
       rawLoader,
       post,
       patch,
+      del,
     },
   };
 }));
