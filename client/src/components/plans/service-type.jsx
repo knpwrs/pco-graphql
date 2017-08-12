@@ -8,9 +8,12 @@ import { serviceTypeShape } from '../../shapes/plans';
 
 const BareServiceType = ({ type, t }) => (
   <Card title={type.name}>
-    {type.plans.length > 0
-      ? <PlanRows plans={type.plans} />
-      : <LightText text={t('noPlans')} />}
+    <h3>{type.name}</h3>
+    {type.plans.length > 0 ? (
+      <PlanRows plans={type.plans} />
+    ) : (
+      <LightText text={t('noPlans')} />
+    )}
   </Card>
 );
 

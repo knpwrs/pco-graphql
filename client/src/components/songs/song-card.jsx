@@ -5,7 +5,8 @@ import Card from '../card';
 import { songShape } from '../../shapes/songs';
 
 const SongCard = ({ song, setSong }) => (
-  <Card title={song.title}>
+  <Card>
+    <h3>{song.title}</h3>
     <SongInfo song={song} setSong={setSong} />
   </Card>
 );
