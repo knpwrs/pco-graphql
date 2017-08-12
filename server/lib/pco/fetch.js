@@ -10,6 +10,12 @@ const d = debug('app:fetch');
 const LIMIT = 100; // 100 requests in...
 const INTERVAL = 20 * 1000; // 20 seconds
 
+export class BadRequestError extends Error {
+  constructor() {
+    super('Bad request.');
+  }
+}
+
 export class UnauthorizedError extends Error {
   constructor() {
     super('Unauthorized. Did our token get revoked?');
@@ -37,13 +43,20 @@ const bareFetch = curryN(2, async (accessToken, url, ops = {}) => {
   let res = { ok: false };
   // Iterations of this loop are not independent of each other
   /* eslint-disable no-await-in-loop */
+  const { method } = ops;
   while (!res.ok) {
-    d(`GETting ${url}`);
+    d(`${method || 'GET'} ${url}`);
     res = await fetch(url, mergeDeepLeft({
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     }, ops));
+    if (res.status === 400) {
+      const err = new BadRequestError();
+      d(err);
+      d(await res.json());
+      throw err;
+    }
     if (res.status === 401) {
       const err = new UnauthorizedError();
       d(err);
@@ -62,7 +75,7 @@ const bareFetch = curryN(2, async (accessToken, url, ops = {}) => {
   }
   /* eslint-enable no-await-in-loop */
   d(`Resolving ${url}`);
-  return res.json();
+  return method === 'DELETE' ? { success: true } : res.json();
 });
 
 
@@ -139,3 +152,8 @@ export const memoizedSendJsonFactory = curry(
 
 export const memoizedPostFactory = memoizedSendJsonFactory('POST');
 export const memoizedPatchFactory = memoizedSendJsonFactory('PATCH');
+export const memoizedDeleteFactory = curry(
+  (accessToken, url) => memoizedFetchFactory(accessToken)(url, {
+    method: 'DELETE',
+  }),
+);

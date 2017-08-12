@@ -79,8 +79,8 @@ export const typeDefs = [`
   }
 
   extend type Mutation {
-    addPerson(attributes: PersonAttributes): Person
-    updatePerson(id: ID!, attributes: PersonAttributes): Person
+    addPerson(attributes: PersonAttributes!): Person
+    updatePerson(id: ID!, attributes: PersonAttributes!): Person
   }
 `];
 
@@ -146,7 +146,7 @@ export const resolvers = {
         type: 'Person',
         attributes,
       });
-      d('Person added.');
+      d('Person updated.');
       d(data);
       return data;
     },
