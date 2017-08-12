@@ -1,38 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import g, { Div } from 'glamorous';
-import { pathOr, compose, assoc } from 'ramda';
+import { complement, path, compose, assoc } from 'ramda';
 import { translate } from 'react-i18next';
-import { withState, withHandlers } from 'recompose';
+import { withState, withHandlers, branch, renderComponent } from 'recompose';
 import { H3 } from '../typography';
 import LightText from '../light-text';
 import { personShape } from '../../shapes/people';
+
+const cPath = complement(path);
 
 const Column = g.div({
   flex: 1,
 });
 
-const BarePhoneNumberSpan = ({ person, t }) => (
-  <span>{pathOr(<LightText text={t('noPhone')} />, ['phone_numbers', 0, 'number'], person)}</span>
+const NoPhoneNumber = translate('people')(({ t }) => <LightText text={t('noPhone')} />);
+const NoEmailAddress = translate('people')(({ t }) => <LightText text={t('noEmail')} />);
+
+const BarePhoneNumberSpan = ({ person }) => (
+  <span>{person.phone_numbers[0].number}</span>
 );
 
 BarePhoneNumberSpan.propTypes = {
   person: personShape.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-const PhoneNumberSpan = translate('people')(BarePhoneNumberSpan);
+const PhoneNumberSpan = branch(
+  cPath(['person', 'phone_numbers', 'length']),
+  renderComponent(NoPhoneNumber),
+)(BarePhoneNumberSpan);
 
-const BareEmailAddressSpan = ({ person, t }) => (
-  <span>{pathOr(<LightText text={t('noEmail')} />, ['emails', 0, 'address'], person)}</span>
+const BareEmailAddressSpan = ({ person }) => (
+  <span>{person.emails[0].address}</span>
 );
 
 BareEmailAddressSpan.propTypes = {
   person: personShape.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-const EmailAddressSpan = translate('people')(BareEmailAddressSpan);
+const EmailAddressSpan = branch(
+  cPath(['person', 'emails', 'length']),
+  renderComponent(NoEmailAddress),
+)(BareEmailAddressSpan);
 
 const PersonInput = g.input((props, { borderLight, h3 }) => ({
   ...h3,
