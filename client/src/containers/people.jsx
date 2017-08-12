@@ -20,10 +20,14 @@ const peopleQuery = gql`
       first_name
       last_name
       phone_numbers {
+        id
         number
+        location
       }
       emails {
+        id
         address
+        location
       }
     }
   }

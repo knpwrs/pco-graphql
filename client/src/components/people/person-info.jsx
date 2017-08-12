@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import g, { Div } from 'glamorous';
-import { complement, path, compose, assoc } from 'ramda';
+import { complement, path, compose, assoc, match } from 'ramda';
 import { translate } from 'react-i18next';
 import { withState, withHandlers, branch, renderComponent } from 'recompose';
 import { H3 } from '../typography';
@@ -14,34 +14,54 @@ const Column = g.div({
   flex: 1,
 });
 
+const FormatPhone = ({ number, location }) => {
+  const [, area, prefix, line] = match(/.*(\d\d\d).*(\d\d\d).*(\d\d\d\d)/, number);
+  return <span>({area}) {prefix}-{line} <LightText text={`${location}`} /></span>;
+};
+
+FormatPhone.propTypes = {
+  number: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+};
+
 const NoPhoneNumber = translate('people')(({ t }) => <LightText text={t('noPhone')} />);
 const NoEmailAddress = translate('people')(({ t }) => <LightText text={t('noEmail')} />);
 
-const BarePhoneNumberSpan = ({ person }) => (
-  <span>{person.phone_numbers[0].number}</span>
+const BarePhoneNumbers = ({ person }) => (
+  <div>
+    {person.phone_numbers.map(({ id, ...props }) => (
+      <div key={id}>
+        <FormatPhone {...props} />
+      </div>
+    ))}
+  </div>
 );
 
-BarePhoneNumberSpan.propTypes = {
+BarePhoneNumbers.propTypes = {
   person: personShape.isRequired,
 };
 
-const PhoneNumberSpan = branch(
+const PhoneNumbers = branch(
   cPath(['person', 'phone_numbers', 'length']),
   renderComponent(NoPhoneNumber),
-)(BarePhoneNumberSpan);
+)(BarePhoneNumbers);
 
-const BareEmailAddressSpan = ({ person }) => (
-  <span>{person.emails[0].address}</span>
+const BareEmailAddresses = ({ person }) => (
+  <div>
+    {person.emails.map(({ id, address, location }) => (
+      <div key={id}>{address} <LightText text={location} /></div>
+    ))}
+  </div>
 );
 
-BareEmailAddressSpan.propTypes = {
+BareEmailAddresses.propTypes = {
   person: personShape.isRequired,
 };
 
-const EmailAddressSpan = branch(
+const EmailAddresses = branch(
   cPath(['person', 'emails', 'length']),
   renderComponent(NoEmailAddress),
-)(BareEmailAddressSpan);
+)(BareEmailAddresses);
 
 const PersonInput = g.input((props, { borderLight, h3 }) => ({
   ...h3,
@@ -106,10 +126,10 @@ const BarePersonInfo = ({ person, updatePerson, editing, toggleEditing }) => (
       <H3>{person.first_name} {person.last_name}</H3>
       <Div display="flex">
         <Column>
-          <EmailAddressSpan person={person} />
+          <EmailAddresses person={person} />
         </Column>
         <Column>
-          <PhoneNumberSpan person={person} />
+          <PhoneNumbers person={person} />
         </Column>
       </Div>
     </div>
