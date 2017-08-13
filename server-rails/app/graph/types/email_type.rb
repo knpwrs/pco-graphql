@@ -5,5 +5,6 @@ module Types
 
     global_id_field :id
     field :address, !types.String, "The actual email address."
+    field :location, !types.String, "The location for this email address."
   end
 end
