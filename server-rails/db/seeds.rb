@@ -42,3 +42,23 @@ Person.create(
     :location => 'work',
   }],
 )
+
+Song.create(
+  :title => 'Good Good Father',
+  :author => 'Chris Tomlin',
+  :ccli_number => '7036612',
+  :attachments_attributes => [{
+    :filename => 'Original Song in A.m4a',
+    :url => 'https://s3.someservice.com/songs/7036612',
+  }],
+)
+
+Song.create(
+  :title => 'Grace to Grace',
+  :author => 'Hillsong United',
+  :ccli_number => '7057218',
+  :attachments_attributes => [{
+    :filename => 'Original Song in F.m4a',
+    :url => 'https://s3.someservice.com/songs/7057218',
+  }],
+)

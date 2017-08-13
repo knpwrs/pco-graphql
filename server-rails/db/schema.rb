@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170813011753) do
+ActiveRecord::Schema.define(version: 20170813203421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attachments", force: :cascade do |t|
+    t.string "filename"
+    t.string "url"
+    t.bigint "song_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["song_id"], name: "index_attachments_on_song_id"
+  end
 
   create_table "emails", force: :cascade do |t|
     t.string "address"
@@ -40,6 +49,15 @@ ActiveRecord::Schema.define(version: 20170813011753) do
     t.index ["person_id"], name: "index_phone_numbers_on_person_id"
   end
 
+  create_table "songs", force: :cascade do |t|
+    t.string "author"
+    t.string "title"
+    t.string "ccli_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "attachments", "songs"
   add_foreign_key "emails", "people"
   add_foreign_key "phone_numbers", "people"
 end
