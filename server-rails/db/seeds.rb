@@ -14,7 +14,14 @@ Person.create(
   }, {
     :number => '777-777-7777',
     :location => 'work',
-  }]
+  }],
+  :emails_attributes => [{
+    :address => 'foobar@bobmail.info',
+    :location => 'home',
+  }, {
+    :address => 'foobar@reconmail.com',
+    :location => 'work',
+  }],
 )
 
 Person.create(
@@ -26,5 +33,12 @@ Person.create(
   }, {
     :number => '444-444-4444',
     :location => 'work',
-  }]
+  }],
+  :emails_attributes => [{
+    :address => 'barbaz@bobmail.info',
+    :location => 'home',
+  }, {
+    :address => 'barbaz@reconmail.com',
+    :location => 'work',
+  }],
 )
