@@ -1,5 +1,6 @@
 version: '3.3'
 services:
+  # Node App
   redis:
     image: redis:3.2.9
   server:
@@ -28,3 +29,23 @@ services:
     environment:
       DEBUG: ${DEBUG}
       NODE_ENV: development
+  # Rails App
+  db:
+    image: postgres:9.6.4
+    environment:
+      POSTGRES_USER: rails
+      POSTGRES_PASSWORD: rails
+      POSTGRES_DB: rails
+  rails:
+    build: ./server-rails
+    command: ./dev.sh
+    volumes:
+      - ./server-rails:/home/rails/app
+      - /home/rails/app/tmp
+    ports:
+      - "${PORT_RAILS}:8000"
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgresql://rails:rails@db/rails?pool=5

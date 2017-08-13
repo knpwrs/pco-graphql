@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  author: MyString
+  title: MyString
+  ccli_number: MyString
+
+two:
+  author: MyString
+  title: MyString
+  ccli_number: MyString
