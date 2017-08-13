@@ -3,7 +3,7 @@ module Types
     name "Attachment"
     description "An attachment for a Song."
 
-    global_id_field :id
+    field :id, !types.ID, "The database ID of this attachment."
     field :filename, !types.String, "The filename of this attachment."
     field :url, !types.String, "The url of this attachment."
   end

@@ -3,7 +3,7 @@ module Types
     name "Email"
     description "An email address belonging to a person in our app."
 
-    global_id_field :id
+    field :id, !types.ID, "The database ID of this email address."
     field :address, !types.String, "The actual email address."
     field :location, !types.String, "The location for this email address."
   end
