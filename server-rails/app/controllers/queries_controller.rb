@@ -1,12 +1,14 @@
 class QueriesController < ApplicationController
-  def new
-  end
-
   def create
-    query_string = params[:query]
-    query_variables = ensure_hash(params[:variables])
-    result = GraphSchema.execute(query_string, variables: query_variables)
-    render json: result
+    begin
+      query_string = params[:query]
+      query_variables = ensure_hash(params[:variables])
+      result = GraphSchema.execute(query_string, variables: query_variables)
+      render json: result
+    rescue => error
+      # Match graphql error format for all other errors
+      render json: { :errors => [{ :message => error }] }, status: 520
+    end
   end
 
   private
