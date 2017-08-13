@@ -31,5 +31,23 @@ module Types
         person.emails.create(args[:attributes].to_h)
       }
     end
+
+    field :addSong do
+      type SongType
+      argument :attributes, !SongInputType
+      description "Add a Song."
+      resolve ->(obj, args, ctx) { Song.create(args[:attributes].to_h) }
+    end
+
+    field :addAttachment do
+      type AttachmentType
+      argument :songId, !types.ID
+      argument :attributes, !AttachmentInputType
+      description "Add an Attachment to a Song."
+      resolve ->(obj, args, ctx) {
+        song = Song.find(args[:songId])
+        song.attachments.create(args[:attributes].to_h)
+      }
+    end
   end
 end
