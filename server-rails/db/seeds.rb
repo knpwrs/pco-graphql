@@ -5,3 +5,26 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Person.create(
+  :first_name => 'Foo',
+  :last_name => 'McBarrington',
+  :phone_numbers_attributes => [{
+    :number => '888-888-8888',
+    :location => 'home',
+  }, {
+    :number => '777-777-7777',
+    :location => 'work',
+  }]
+)
+
+Person.create(
+  :first_name => 'Bar',
+  :last_name => 'McBazzington',
+  :phone_numbers_attributes => [{
+    :number => '555-555-5555',
+    :location => 'home',
+  }, {
+    :number => '444-444-4444',
+    :location => 'work',
+  }]
+)
