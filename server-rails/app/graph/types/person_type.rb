@@ -6,5 +6,6 @@ module Types
     global_id_field :id
     field :first_name, !types.String, "The first name of this person."
     field :last_name, !types.String, "The last name of this person."
+    field :phone_numbers, types[PhoneNumberType], "Phone numbers for this person."
   end
 end
