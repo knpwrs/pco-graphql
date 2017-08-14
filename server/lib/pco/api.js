@@ -4,6 +4,7 @@ import { curry, clone } from 'ramda';
 export const API_BASE = 'https://api.planningcenteronline.com';
 
 export const adjustApiArgs = (args) => {
+  if (!args) return {};
   const apiArgs = clone(args);
   if (apiArgs.desc) {
     apiArgs.order = `-${apiArgs.order}`;
