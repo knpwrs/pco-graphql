@@ -6,13 +6,20 @@ export const typeDefs = [`
   type ServiceType {
     id: ID!
 
+    # The date and time this service type was created.
     created_at: String!
+    # The frequency at which this plan occurs.
     frequency: String!
+    # The name of this service type.
     name: String!
+    # Permissions associated with this service type.
     permissions: String!
+    # The sequence number of this service type.
     sequence: Int!
+    # The date and time this service type was updated.
     updated_at: String!
 
+    # Plans associated with this service type.
     plans(order: PlanOrderBy, filter: PlanFilter, desc: Boolean, per_page: Int, offset: Int): [Plan]
   }
 
@@ -23,17 +30,14 @@ export const typeDefs = [`
     serviceTypes(nameLike: String): [ServiceType]
   }
 
+  # Methods of filtering service types.
   enum PlanFilter {
-    future
-    past
-    no_dates
+    future, past, no_dates
   }
 
+  # Properties to sort service types by.
   enum PlanOrderBy {
-    title
-    created_at
-    updated_at
-    sort_date
+    title, created_at, updated_at, sort_date
   }
 `];
 

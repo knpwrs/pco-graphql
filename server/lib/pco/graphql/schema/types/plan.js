@@ -7,15 +7,21 @@ export const typeDefs = [`
   type Plan {
     id: ID!
 
+    # The date and time this plan was created.
     created_at: String!
+    # The dates this plan is scheduled for.
     dates: String!
+    # The title of this plan.
     title: String
 
+    # The next plan from this plan.
     next_plan: Plan
+    # The items on this plan.
     items: [Item]
     # People scheduled for this plan.
     team_members: [PlanPerson]
 
+    # The id of the next plan.
     next_plan_id: String
   }
 

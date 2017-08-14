@@ -6,7 +6,9 @@ export const typeDefs = [`
   type App {
     id: ID!
 
+    # The name of this app.
     name: String!
+    # The url of this app.
     url: String!
   }
 `];

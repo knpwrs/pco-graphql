@@ -9,28 +9,43 @@ export const typeDefs = [`
   type PhoneNumber {
     id: ID!
 
+    # The carrier associated with this phone number.
     carrier: String!
+    # The date and time this phone number was created at.
     created_at: String!
+    # The location associated with this phone number (Mobile, Home, Work, etc).
     location: String!
+    # The actual phone number.
     number: String!
+    # Indicates if this phone number is a person's primary phone number.
     primary: Boolean!
+    # The date and time this phone number was last updated.
     updated_at: String!
   }
 
+  # Attributes to create a new phone number.
   input PhoneNumberAttributes {
+    # The carrier associated with this phone number.
     carrier: String
+    # The location associated with this phone number (Mobile, Home, Work, etc).
     location: PhoneNumberLocation!
+    # The actual phone number.
     number: String!
+    # Indicates if this phone number is a person's primary phone number.
     primary: Boolean
   }
 
+  # Possible locations for phone numbers.
   enum PhoneNumberLocation {
     Mobile, Home, Work, Pager, Fax, Skype, Other
   }
 
   extend type Mutation {
+    # Add a phone number to the person with a given ID.
     addPhoneNumber(personId: ID!, attributes: PhoneNumberAttributes!): PhoneNumber
+    # Update a phone number on a person with a given ID.
     updatePhoneNumber(personId: ID!, phoneNumberId: ID!, attributes: PhoneNumberAttributes!): PhoneNumber
+    # Delete a phone number for a person with a given ID.
     deletePhoneNumber(personId: ID!, phoneNumberId: ID!): Boolean
   }
 `];

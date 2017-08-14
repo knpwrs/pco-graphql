@@ -9,24 +9,35 @@ export const typeDefs = [`
   type Email {
     id: ID!
 
+    # The actual email address.
     address: String!
+    # The location (home, work, etc) associated with this email.
     location: String!
+    # Indicates if this email is a person's primary email.
     primary: Boolean!
   }
 
+  # Attributes for creating new emails.
   input EmailAttributes {
+    # The actual email address.
     address: String!
+    # The location (home, work, etc) associated with this email.
     location: EmailLocation!
+    # Indicates if this email is a person's primary email.
     primary: Boolean
   }
 
+  # An enumeration of possible email locations.
   enum EmailLocation {
     Home, Work, Other
   }
 
   extend type Mutation {
+    # Add an email to a person with the given ID.
     addEmail(personId: ID!, attributes: EmailAttributes!): Email
+    # Change an email on a person with the given ID.
     updateEmail(personId: ID!, emailId: ID!, attributes: EmailAttributes!): Email
+    # Delete an email with a given ID.
     deleteEmail(emailId: ID!): Boolean
   }
 `];
