@@ -58,3 +58,9 @@ gem "graphiql-rails", "~> 1.4"
 
 # Added at 2017-08-13 01:51:27 +0000 by root:
 gem "graphql", "~> 1.6"
+
+# Added at 2017-08-15 03:36:59 +0000 by root:
+gem "dataloader", "~> 1.0"
+
+# Added at 2017-08-15 04:12:00 +0000 by root:
+gem "order_as_specified", "~> 1.3"

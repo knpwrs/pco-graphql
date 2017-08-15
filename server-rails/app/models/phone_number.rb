@@ -1,4 +1,6 @@
 class PhoneNumber < ApplicationRecord
+  extend OrderAsSpecified
+
   belongs_to :person
 
   validates :number, presence: true
