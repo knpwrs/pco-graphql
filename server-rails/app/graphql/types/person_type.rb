@@ -6,8 +6,22 @@ module Types
     field :id, !types.ID, "The database ID of this person."
     field :first_name, !types.String, "The first name of this person."
     field :last_name, !types.String, "The last name of this person."
-    field :phone_numbers, types[PhoneNumberType], "Phone numbers for this person."
-    field :emails, types[EmailType], "Emails for this person."
+    field :phone_numbers, types[PhoneNumberType] do
+      description "Phone numbers for this person."
+      resolve ->(person, args, ctx) do
+        BatchLoader.for(person.phone_number_ids).batch do |phone_number_ids, batch_loader|
+          PhoneNumber.where(id: phone_number_ids).each { |phone_number| batch_loader.load(phone_number.id, phone_number) }
+        end
+      end
+    end
+    field :emails, types[EmailType] do
+      description "Emails for this person."
+      resolve ->(person, args, ctx) do
+        BatchLoader.for(person.email_ids).batch do |email_ids, batch_loader|
+          Email.where(id: email_ids).each { |email| batch_loader.load(email.id, email) }
+        end
+      end
+    end
   end
 
   PersonInputType = GraphQL::InputObjectType.define do

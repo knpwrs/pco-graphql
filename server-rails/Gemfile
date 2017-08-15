@@ -58,3 +58,6 @@ gem "graphiql-rails", "~> 1.4"
 
 # Added at 2017-08-13 01:51:27 +0000 by root:
 gem "graphql", "~> 1.6"
+
+# Added at 2017-08-15 02:21:44 +0000 by root:
+gem "batch-loader", "~> 0.3.0"

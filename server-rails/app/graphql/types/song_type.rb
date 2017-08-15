@@ -7,7 +7,14 @@ module Types
     field :title, !types.String, "The title of this song."
     field :author, !types.String, "The author of this song."
     field :ccli_number, !types.String, "The CCLI number of this song."
-    field :attachments, types[AttachmentType], "Attachments on this song."
+    field :attachments, types[AttachmentType] do
+      description "Attachments on this song."
+      resolve ->(person, args, ctx) do
+        BatchLoader.for(person.attachment_ids).batch do |attachment_ids, batch_loader|
+          Attachment.where(id: attachment_ids).each { |attachment| batch_loader.load(attachment.id, attachment) }
+        end
+      end
+    end
   end
 
   SongInputType = GraphQL::InputObjectType.define do
