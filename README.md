@@ -15,7 +15,7 @@ query server. Written with [React], [Apollo], [Redux], [i18next], and
 
 ## Sample Ruby on Rails GraphQL Server
 
-Located in [`./server-rails`] (the interesting bits are in
+Located in [`./server-rails`] \(the interesting bits are in
 [`./server-rails/app/graphql`]). This is a small ruby on rails application
 which exposes a GraphQL api. Written with [Ruby on Rails], [`graphql-ruby`],
 and [`dataloader`] (Ruby version).
@@ -67,6 +67,7 @@ the rails docker container.
 [Ruby on Rails]: http://rubyonrails.org/ "Ruby on Rails"
 [`./client`]: ./client "client"
 [`./server-rails/app/graphql`]: ./server-rails/app/graphql "./server-rails/app/graphql"
+[`./server-rails`]: ./server-rails "server"
 [`./server`]: ./server "server"
 [`.env`]: https://docs.docker.com/compose/environment-variables/#the-env-file ".env"
 [`dataloader`]: https://github.com/sheerun/dataloader "dataloader"
