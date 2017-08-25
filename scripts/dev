@@ -3,12 +3,12 @@
 set -e
 
 if [ $# -gt 0 ]; then
-  if [ "$1" == "npmc" ]; then
+  if [ "$1" == "cnpm" ]; then
     shift 1
-    docker-compose run --rm client npm "$@"
-  elif [ "$1" == "npms" ]; then
+    docker-compose exec client npm "$@"
+  elif [ "$1" == "snpm" ]; then
     shift 1
-    docker-compose run --rm server npm "$@"
+    docker-compose exec server npm "$@"
   elif [ "$1" == "test" ]; then
     shift 1
     docker-compose run --rm server npm test "$@"
